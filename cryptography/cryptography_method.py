@@ -50,7 +50,7 @@ if __name__ == '__main__':
             yellow_print(f'明文: {plain_text}\n')
         except ValueError:
             red_print("错误: 无效的密钥, 请输入32个URL安全的base64编码字节\n")
-        except InvalidToken as i:
+        except InvalidToken:
             red_print("错误: 解密失败, 密钥或密文无效\n")
         except KeyboardInterrupt:
             red_print("\n程序已强制中断")
