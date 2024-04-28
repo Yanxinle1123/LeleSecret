@@ -8,7 +8,7 @@ from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 from cryptography.fernet import InvalidToken
 
-from fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
+from Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 
 
 def quit_window():
