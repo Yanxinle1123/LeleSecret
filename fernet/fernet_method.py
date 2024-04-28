@@ -2,7 +2,7 @@ from comm.common import green_input, orange_print, yellow_print, blue_print, red
 from cryptography.fernet import Fernet, InvalidToken
 
 
-class CryptographyEncryptionMethod:
+class FernetEncryptionMethod:
     def __init__(self, text):
         self._text = text
 
@@ -14,7 +14,7 @@ class CryptographyEncryptionMethod:
         return key, cipher_text
 
 
-class CryptographyDecryptionMethod:
+class FernetDecryptionMethod:
     def __init__(self, text, key):
         self._text = text
         self._key = key
@@ -32,7 +32,7 @@ if __name__ == '__main__':
             if text == 'q':
                 orange_print("已退出")
                 break
-            CEM = CryptographyEncryptionMethod(text)
+            CEM = FernetEncryptionMethod(text)
             key, cipher_text = CEM.encryption()
             yellow_print(f'密文: {cipher_text}')
             blue_print(f'密钥: {key}\n')
@@ -45,7 +45,7 @@ if __name__ == '__main__':
             if key == 'q':
                 orange_print("已退出")
                 break
-            CDM = CryptographyDecryptionMethod(cipher_text, key)
+            CDM = FernetDecryptionMethod(cipher_text, key)
             plain_text = CDM.decryption()
             yellow_print(f'明文: {plain_text}\n')
         except ValueError:

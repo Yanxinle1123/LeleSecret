@@ -8,7 +8,7 @@ from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 from cryptography.fernet import InvalidToken
 
-from cryptography_method import CryptographyEncryptionMethod, CryptographyDecryptionMethod
+from fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 
 
 def quit_window():
@@ -23,7 +23,7 @@ def replace(text_box, text):
 
 
 def encryption():
-    CEM = CryptographyEncryptionMethod(encryption_text_need.get_content())
+    CEM = FernetEncryptionMethod(encryption_text_need.get_content())
     key, cipher_text = CEM.encryption()
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
@@ -31,7 +31,7 @@ def encryption():
 
 def decryption():
     try:
-        CDM = CryptographyDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+        CDM = FernetDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
