@@ -24,7 +24,7 @@ class AESEncryptionMethod:
 class AESDecryptionMethod:
     def __init__(self, text, key):
         self._text = text
-        self._key = key
+        self._key = base64.b64decode(key)
 
     def decrypt(self):
         cipher_text = base64.b64decode(self._text.encode('utf-8'))
@@ -57,7 +57,7 @@ if __name__ == '__main__':
             if key_input == "q":
                 orange_print("已退出")
                 break
-            AESDM = AESDecryptionMethod(cipher_text, base64.b64decode(key_input))
+            AESDM = AESDecryptionMethod(cipher_text, key_input)
             plain_text = AESDM.decrypt()
             yellow_print(f"明文: {plain_text}\n")
         except TypeError:
