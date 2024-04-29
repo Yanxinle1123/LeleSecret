@@ -22,14 +22,27 @@ def decrypt(cipher_text, key):
     return plain_text.decode('utf-8')
 
 
-# 生成密钥
-key = os.urandom(32)
+while True:
+    # 生成密钥
+    key = os.urandom(32)
 
-# 加密
-text = "hello world"
-cipher_text = encrypt(text, key)
-print(cipher_text)
+    # 加密
+    text = input("请输入需要加密的内容(输入q退出): ")
+    if text == "q":
+        print("已退出")
+        break
+    cipher_text = encrypt(text, key)
+    print(f"密钥: {base64.b64encode(key).decode('utf-8')}")
+    print(f"密文: {cipher_text}\n")
 
-# 解密
-plain_text = decrypt(cipher_text, key)
-print(plain_text)
+    # 解密
+    cipher_text = input("请输入需要解密的内容(输入q退出): ")
+    if cipher_text == "q":
+        print("已退出")
+        break
+    key_input = input("请输入密钥(输入q退出): ")
+    if key_input == "q":
+        print("已退出")
+        break
+    plain_text = decrypt(cipher_text, base64.b64decode(key_input))
+    print(f"明文: {plain_text}\n")
