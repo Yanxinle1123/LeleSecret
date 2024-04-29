@@ -57,7 +57,7 @@ if __name__ == '__main__':
             if key_input == "q":
                 orange_print("已退出")
                 break
-            AESDM = AESDecryptionMethod(cipher_text, base64.b64decode(key_input))  # 修复这一行
+            AESDM = AESDecryptionMethod(cipher_text, base64.b64decode(key_input))
             plain_text = AESDM.decrypt()
             yellow_print(f"明文: {plain_text}\n")
         except TypeError:
