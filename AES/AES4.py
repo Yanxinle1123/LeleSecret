@@ -16,29 +16,32 @@ def quit_window():
     window.destroy()
 
 
-def replace(text_box, text):
-    text_box.get_text().config(state="normal")
-    text_box.get_text().delete("1.0", tk.END)
-    text_box.get_text().insert(tk.END, text)
-    text_box.get_text().config(state="disabled")
+def set_txt_obj_text_value(text_obj, text_str: str):
+    text_obj.get_text().config(state="normal")
+    text_obj.get_text().delete("1.0", tk.END)
+    text_obj.get_text().insert(tk.END, text_str)
+    text_obj.get_text().config(state="disabled")
 
 
 def encryption():
-    AESEM = AESEncryptionMethod(encryption_text_need.get_content())
-    key, cipher_text = AESEM.encryption()
-    replace(key_text, key)
-    replace(encryption_text_after, cipher_text)
+    encrypt_obj = AESEncryptionMethod(encryption_text_need.get_content())
+    cipher_text, key = encrypt_obj.encryption()
+    # print(f"加密-原文: {encryption_text_need.get_content()}")
+    # print(f"加密-密文: {cipher_text}")
+    # print(f"加密-密钥: {key}")
+    set_txt_obj_text_value(key_text, key)
+    set_txt_obj_text_value(encryption_text_after, cipher_text)
 
 
 def decryption():
     try:
         cipher_text = decryption_text_need.get_content()
         key = key_text_need.get_content()
-        print(f"密文: {cipher_text}")
-        print(f"密钥: {key}")
-        AESDM = AESDecryptionMethod(cipher_text, key)
-        plain_text = AESDM.decryption()
-        replace(decryption_text_after, plain_text)
+        # print(f"解密-密文: {cipher_text}")
+        # print(f"解密-密钥: {key}")
+        decrypt_obj = AESDecryptionMethod(cipher_text, key)
+        plain_text = decrypt_obj.decryption()
+        set_txt_obj_text_value(decryption_text_after, plain_text)
     except TypeError:
         EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
     except binascii.Error:

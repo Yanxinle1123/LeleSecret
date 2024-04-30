@@ -9,30 +9,33 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 
 class AESEncryptionMethod:
-    def __init__(self, text):
-        self._text = text
+    def __init__(self, text_arg):
+        self._text = text_arg
 
     def encryption(self):
-        key = os.urandom(32)
+        key_local = os.urandom(32)
         iv = os.urandom(12)  # 对于GCM模式，推荐使用12字节的随机IV
-        cipher = Cipher(algorithms.AES(key), modes.GCM(iv), backend=default_backend())
+        cipher = Cipher(algorithms.AES(key_local), modes.GCM(iv), backend=default_backend())
         encryptor = cipher.encryptor()
-        cipher_text = encryptor.update(self._text.encode('utf-8')) + encryptor.finalize()
-        return base64.b64encode(iv + encryptor.tag + cipher_text).decode('utf-8'), base64.b64encode(key).decode('utf-8')
+        cipher_text_local = encryptor.update(self._text.encode('utf-8')) + encryptor.finalize()
+        last_encrypt_str = base64.b64encode(iv + encryptor.tag + cipher_text_local).decode('utf-8')
+        last_encrypt_key = base64.b64encode(key_local).decode('utf-8')
+        return last_encrypt_str, last_encrypt_key
 
 
 class AESDecryptionMethod:
-    def __init__(self, text, key):
-        self._text = text
-        self._key = base64.b64decode(key)
+    def __init__(self, text_arg, key_arg):
+        self._text = text_arg
+        self._key = base64.b64decode(key_arg)
 
     def decryption(self):
-        cipher_text = base64.b64decode(self._text.encode('utf-8'))
-        iv, tag, cipher_text = cipher_text[:12], cipher_text[12:28], cipher_text[28:]
+        cipher_text_local = base64.b64decode(self._text.encode('utf-8'))
+        iv, tag, cipher_text_local = cipher_text_local[:12], cipher_text_local[12:28], cipher_text_local[28:]
         cipher = Cipher(algorithms.AES(self._key), modes.GCM(iv, tag), backend=default_backend())
-        decryptor = cipher.decryptor()
-        plain_text = decryptor.update(cipher_text) + decryptor.finalize()
-        return plain_text.decode('utf-8')
+        decrypt_local = cipher.decryptor()
+        decrypt_text_local = decrypt_local.update(cipher_text_local) + decrypt_local.finalize()
+        last_decrypt_str = decrypt_text_local.decode('utf-8')
+        return last_decrypt_str
 
 
 if __name__ == '__main__':
@@ -43,8 +46,8 @@ if __name__ == '__main__':
             if text == "q":
                 orange_print("已退出")
                 break
-            AESEM = AESEncryptionMethod(text)
-            cipher_text, key = AESEM.encryption()
+            encrypt_obj = AESEncryptionMethod(text)
+            cipher_text, key = encrypt_obj.encryption()
             blue_print(f"密钥: {key}")
             yellow_print(f"密文: {cipher_text}\n")
 
@@ -57,8 +60,8 @@ if __name__ == '__main__':
             if key_input == "q":
                 orange_print("已退出")
                 break
-            AESDM = AESDecryptionMethod(cipher_text, key_input)
-            plain_text = AESDM.decryption()
+            decrypt_obj = AESDecryptionMethod(cipher_text, key_input)
+            plain_text = decrypt_obj.decryption()
             yellow_print(f"明文: {plain_text}\n")
         except TypeError:
             red_print("错误: 无效的密钥, 请输入正确的Base64编码密钥\n")

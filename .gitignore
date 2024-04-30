@@ -160,3 +160,19 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/sonarlint/issuestore/3/2/322893cb66a53c8c3ed945750dbeb60aa3d96850
+/.idea/sonarlint/issuestore/8/f/8ffed6fe211098edf316a362f5b66299610ab427
+/.idea/sonarlint/issuestore/e/d/ed0297c558c2390a61094f2cb3f1054cd42ccecf
+/.idea/sonarlint/issuestore/index.pb
+/.idea/sonarlint/securityhotspotstore/3/2/322893cb66a53c8c3ed945750dbeb60aa3d96850
+/.idea/sonarlint/securityhotspotstore/8/f/8ffed6fe211098edf316a362f5b66299610ab427
+/.idea/sonarlint/securityhotspotstore/e/d/ed0297c558c2390a61094f2cb3f1054cd42ccecf
+/.idea/sonarlint/securityhotspotstore/index.pb
+/.idea/.gitignore
+/.idea/dbnavigator.xml
+/.idea/LeleSecret.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
