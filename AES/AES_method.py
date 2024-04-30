@@ -2,7 +2,7 @@ import base64
 import binascii
 import os
 
-from comm.common import green_input, orange_print, blue_print, yellow_print, red_print
+from comm.common import red_print, yellow_print, orange_print, green_input, blue_print
 from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -12,7 +12,7 @@ class AESEncryptionMethod:
     def __init__(self, text):
         self._text = text
 
-    def encrypt(self):
+    def encryption(self):
         key = os.urandom(32)
         iv = os.urandom(12)  # 对于GCM模式，推荐使用12字节的随机IV
         cipher = Cipher(algorithms.AES(key), modes.GCM(iv), backend=default_backend())
@@ -26,7 +26,7 @@ class AESDecryptionMethod:
         self._text = text
         self._key = base64.b64decode(key)
 
-    def decrypt(self):
+    def decryption(self):
         cipher_text = base64.b64decode(self._text.encode('utf-8'))
         iv, tag, cipher_text = cipher_text[:12], cipher_text[12:28], cipher_text[28:]
         cipher = Cipher(algorithms.AES(self._key), modes.GCM(iv, tag), backend=default_backend())
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                 orange_print("已退出")
                 break
             AESEM = AESEncryptionMethod(text)
-            cipher_text, key = AESEM.encrypt()
+            cipher_text, key = AESEM.encryption()
             blue_print(f"密钥: {key}")
             yellow_print(f"密文: {cipher_text}\n")
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                 orange_print("已退出")
                 break
             AESDM = AESDecryptionMethod(cipher_text, key_input)
-            plain_text = AESDM.decrypt()
+            plain_text = AESDM.decryption()
             yellow_print(f"明文: {plain_text}\n")
         except TypeError:
             red_print("错误: 无效的密钥, 请输入正确的Base64编码密钥\n")
