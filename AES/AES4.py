@@ -26,9 +26,6 @@ def set_txt_obj_text_value(text_obj, text_str: str):
 def encryption():
     encrypt_obj = AESEncryptionMethod(encryption_text_need.get_content())
     cipher_text, key = encrypt_obj.encryption()
-    # print(f"加密-原文: {encryption_text_need.get_content()}")
-    # print(f"加密-密文: {cipher_text}")
-    # print(f"加密-密钥: {key}")
     set_txt_obj_text_value(key_text, key)
     set_txt_obj_text_value(encryption_text_after, cipher_text)
 
@@ -37,8 +34,6 @@ def decryption():
     try:
         cipher_text = decryption_text_need.get_content()
         key = key_text_need.get_content()
-        # print(f"解密-密文: {cipher_text}")
-        # print(f"解密-密钥: {key}")
         decrypt_obj = AESDecryptionMethod(cipher_text, key)
         plain_text = decrypt_obj.decryption()
         set_txt_obj_text_value(decryption_text_after, plain_text)
