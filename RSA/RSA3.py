@@ -28,6 +28,7 @@ def decrypt(encrypted_data, cipher):
 
 
 while True:
+    step = 0
     try:
         data = green_input("请输入要加密的内容(输入q退出):")
         if data == "q":
@@ -45,9 +46,11 @@ while True:
         if key_nonce_input == 'q':
             orange_print("已退出")
             break
-
+        step = 0
         key_input, nonce_input = key_nonce_input.split(", ")
+        step = 1
         cipher_text = binascii.unhexlify(cipher_text)
+        step = 2
         key_input = binascii.unhexlify(key_input)
         nonce_input = binascii.unhexlify(nonce_input)
         cipher_input = Cipher(algorithms.ChaCha20(key_input, nonce_input), mode=None, backend=default_backend())
@@ -56,4 +59,7 @@ while True:
     except UnicodeDecodeError:
         red_print("解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确\n")
     except ValueError:
-        red_print("输入的密钥格式不正确\n")
+        if step == 0 or step == 2:
+            red_print("输入的密钥不正确\n")
+        else:
+            red_print("输入的密文不正确\n")
