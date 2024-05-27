@@ -36,7 +36,7 @@ while True:
             break
         encrypted_data = encrypt(data.encode("utf-8"), cipher)
         blue_print(f"密文: {binascii.hexlify(encrypted_data).decode()}")
-        yellow_print(f"密钥: {binascii.hexlify(key).decode()}, {binascii.hexlify(nonce).decode()}\n")
+        yellow_print(f"密钥: {binascii.hexlify(key).decode()}+{binascii.hexlify(nonce).decode()}\n")
 
         cipher_text = green_input("请输入要解密的内容(输入q退出): ")
         if cipher_text == 'q':
@@ -46,7 +46,7 @@ while True:
         if key_nonce_input == 'q':
             orange_print("已退出")
             break
-        key_input, nonce_input = key_nonce_input.split(", ")
+        key_input, nonce_input = key_nonce_input.split("+")
         step += 1
         cipher_text = binascii.unhexlify(cipher_text)
         step += 1
