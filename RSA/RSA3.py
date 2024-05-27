@@ -30,7 +30,7 @@ def decrypt(encrypted_data, cipher):
 while True:
     step = 0
     try:
-        data = green_input("请输入要加密的内容(输入q退出):")
+        data = green_input("请输入要加密的内容(输入q退出): ")
         if data == "q":
             orange_print("已退出")
             break
@@ -38,11 +38,11 @@ while True:
         blue_print(f"密文: {binascii.hexlify(encrypted_data).decode()}")
         yellow_print(f"密钥: {binascii.hexlify(key).decode()}, {binascii.hexlify(nonce).decode()}\n")
 
-        cipher_text = green_input("请输入要解密的内容(输入q退出):")
+        cipher_text = green_input("请输入要解密的内容(输入q退出): ")
         if cipher_text == 'q':
             orange_print("已退出")
             break
-        key_nonce_input = green_input("请输入密钥(输入q退出):")
+        key_nonce_input = green_input("请输入密钥(输入q退出): ")
         if key_nonce_input == 'q':
             orange_print("已退出")
             break
