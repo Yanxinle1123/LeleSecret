@@ -50,7 +50,7 @@ def decryption():
 
 
 window = tk.Tk()
-EasyAutoWindow(window, window_title="CryptographyMethod", minimum_value_x=1312, minimum_value_y=876,
+EasyAutoWindow(window, window_title="AESMethod", minimum_value_x=1312, minimum_value_y=876,
                window_width_value=1400, window_height_value=890)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()

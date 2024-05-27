@@ -32,8 +32,8 @@ if __name__ == '__main__':
             if text == 'q':
                 orange_print("已退出")
                 break
-            CEM = FernetEncryptionMethod(text)
-            key, cipher_text = CEM.encryption()
+            FEM = FernetEncryptionMethod(text)
+            key, cipher_text = FEM.encryption()
             yellow_print(f'密文: {cipher_text}')
             blue_print(f'密钥: {key}\n')
 
@@ -45,8 +45,8 @@ if __name__ == '__main__':
             if key == 'q':
                 orange_print("已退出")
                 break
-            CDM = FernetDecryptionMethod(cipher_text, key)
-            plain_text = CDM.decryption()
+            FDM = FernetDecryptionMethod(cipher_text, key)
+            plain_text = FDM.decryption()
             yellow_print(f'明文: {plain_text}\n')
         except ValueError:
             red_print("错误: 无效的密钥, 请输入32个URL安全的base64编码字节\n")

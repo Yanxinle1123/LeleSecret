@@ -6,9 +6,8 @@ from LeleEasyTkinter.easy_frame import EasyFrame
 from LeleEasyTkinter.easy_label import EasyLabel
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
-from cryptography.fernet import InvalidToken
 
-from Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
+from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
 def quit_window():
@@ -23,25 +22,25 @@ def replace(text_box, text):
 
 
 def encryption():
-    CEM = FernetEncryptionMethod(encryption_text_need.get_content())
-    key, cipher_text = CEM.encryption()
+    REM = RSAEncryptionMethod(encryption_text_need.get_content())
+    cipher_text, key = REM.encryption()
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
 
 def decryption():
     try:
-        CDM = FernetDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
-        plain_text = CDM.decryption()
+        RDM = RSADecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+        plain_text = RDM.decryption()
         replace(decryption_text_after, plain_text)
+    except UnicodeDecodeError:
+        EasyWarningWindows("警告", "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
-        EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
-    except InvalidToken:
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
+        EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
 
 
 window = tk.Tk()
-EasyAutoWindow(window, window_title="FernetMethod", minimum_value_x=1312, minimum_value_y=876,
+EasyAutoWindow(window, window_title="RSAMethod", minimum_value_x=1312, minimum_value_y=876,
                window_width_value=1400, window_height_value=890)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
