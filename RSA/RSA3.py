@@ -46,11 +46,10 @@ while True:
         if key_nonce_input == 'q':
             orange_print("已退出")
             break
-        step = 0
         key_input, nonce_input = key_nonce_input.split(", ")
-        step = 1
+        step += 1
         cipher_text = binascii.unhexlify(cipher_text)
-        step = 2
+        step += 1
         key_input = binascii.unhexlify(key_input)
         nonce_input = binascii.unhexlify(nonce_input)
         cipher_input = Cipher(algorithms.ChaCha20(key_input, nonce_input), mode=None, backend=default_backend())
