@@ -67,12 +67,20 @@ def settings():
         num += 1
         settings_window = tk.Toplevel()
 
-        EasyAutoWindow(settings_window, window_title="settings", window_width_value=700, window_height_value=950,
+        EasyAutoWindow(settings_window, window_title="settings", window_width_value=600, window_height_value=150,
                        adjust_x=False, adjust_y=False)
 
-        EasyLabel(settings_window, text="加密解密的算法:", fill=tk.BOTH, side=tk.LEFT)
+        f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
+        f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
+        f3 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
-        EasyDropList(settings_window, options=['AES', 'Fernet', 'RSA'], side=tk.LEFT)
+        EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
+        EasyDropList(f1, options=['AES', 'Fernet', 'RSA'], side=tk.LEFT)
+
+        EasyLabel(f2, text="主题:", side=tk.LEFT)
+        EasyDropList(f2, options=['跟随系统', '自动', '深色', '浅色'], side=tk.LEFT)
+
+        EasyButton(f3, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close)
 
         fade_in(settings_window)
         settings_window.attributes('-topmost', 'true')
