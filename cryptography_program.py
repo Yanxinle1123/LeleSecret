@@ -57,7 +57,7 @@ def decryption():
     except UnicodeDecodeError:
         EasyWarningWindows("警告", "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
-        EasyWarningWindows("警 告", "错误\n\n输入的密钥或密文不正确").show_warning()
+        EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
 
 
 def settings():
