@@ -1,5 +1,6 @@
 import tkinter as tk
 
+import customtkinter as ctk
 from LeleEasyTkinter.easy_auto_window import EasyAutoWindow
 from LeleEasyTkinter.easy_button import EasyButton
 from LeleEasyTkinter.easy_drop_list import EasyDropList
@@ -60,12 +61,16 @@ def decryption():
         EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
 
 
+def application_settings():
+    return
+
+
 def settings():
     global settings_window, num
 
     if num != 1:
         num += 1
-        settings_window = tk.Toplevel()
+        settings_window = ctk.CTkToplevel()
 
         EasyAutoWindow(settings_window, window_title="settings", window_width_value=600, window_height_value=150,
                        adjust_x=False, adjust_y=False)
@@ -80,7 +85,8 @@ def settings():
         EasyLabel(f2, text="主题:", side=tk.LEFT)
         EasyDropList(f2, options=['跟随系统', '自动', '深色', '浅色'], side=tk.LEFT)
 
-        EasyButton(f3, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close)
+        EasyButton(f3, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
+        EasyButton(f3, text="应用", expand=tk.YES, height=2, side=tk.RIGHT, cmd=application_settings)
 
         fade_in(settings_window)
         settings_window.attributes('-topmost', 'true')
@@ -89,7 +95,7 @@ def settings():
 
 settings_window = None
 num = 0
-window = tk.Tk()
+window = ctk.CTk()
 EasyAutoWindow(window, window_title="cryptography", minimum_value_x=1312, minimum_value_y=876,
                window_width_value=1400, window_height_value=890)
 
