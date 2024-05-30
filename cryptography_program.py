@@ -51,9 +51,18 @@ def replace(text_box, text):
     text_box.get_text().config(state="disabled")
 
 
+def get_data():
+    decryption_text = decryption_text_need.get_content()
+    key_and_algorithm = key_text_need.get_content()
+    algorithm_choice = key_and_algorithm[0]
+    key = key_and_algorithm[1:]
+    return decryption_text, algorithm_choice, key
+
+
 def AES_encryption():
     encrypt_obj = AESEncryptionMethod(encryption_text_need.get_content())
     cipher_text, key = encrypt_obj.encryption()
+    key = f'1{key}'
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
@@ -61,6 +70,7 @@ def AES_encryption():
 def Fernet_encryption():
     CEM = FernetEncryptionMethod(encryption_text_need.get_content())
     key, cipher_text = CEM.encryption()
+    key = f'2{key}'
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
@@ -68,15 +78,21 @@ def Fernet_encryption():
 def RSA_encryption():
     REM = RSAEncryptionMethod(encryption_text_need.get_content())
     cipher_text, key = REM.encryption()
+    key = f'3{key}'
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
 
-def AES_decryption():
+def auto_encryption():
+    if len(encryption_text_need.get_content()) <= 2000:
+        RSA_encryption()
+    else:
+        AES_encryption()
+
+
+def AES_decryption(decryption_text, key):
     try:
-        cipher_text = decryption_text_need.get_content()
-        key = key_text_need.get_content()
-        decrypt_obj = AESDecryptionMethod(cipher_text, key)
+        decrypt_obj = AESDecryptionMethod(decryption_text, key)
         plain_text = decrypt_obj.decryption()
         replace(decryption_text_after, plain_text)
     except TypeError:
@@ -91,9 +107,9 @@ def AES_decryption():
         EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
 
 
-def Fernet_decryption():
+def Fernet_decryption(decryption_text, key):
     try:
-        CDM = FernetDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+        CDM = FernetDecryptionMethod(decryption_text, key)
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
@@ -102,9 +118,9 @@ def Fernet_decryption():
         EasyWarningWindows("警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
 
 
-def RSA_decryption():
+def RSA_decryption(decryption_text, key):
     try:
-        RDM = RSADecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+        RDM = RSADecryptionMethod(decryption_text, key)
         plain_text = RDM.decryption()
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
@@ -117,23 +133,36 @@ def RSA_decryption():
 def encryption():
     global algorithm_settings
 
+    with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
+        algorithm_settings = file.read()
+    if algorithm_settings == 'AES':
+        algorithm_settings = 1
+    elif algorithm_settings == 'Fernet':
+        algorithm_settings = 2
+    elif algorithm_settings == 'RSA':
+        algorithm_settings = 3
+    else:
+        algorithm_settings = 4
+    print(algorithm_settings)
     if algorithm_settings == 1:
         AES_encryption()
     elif algorithm_settings == 2:
         Fernet_encryption()
-    else:
+    elif algorithm_settings == 3:
         RSA_encryption()
+    else:
+        auto_encryption()
 
 
 def decryption():
-    global algorithm_settings
+    decryption_text, algorithm_choice, key = get_data()
 
-    if algorithm_settings == 1:
-        AES_decryption()
-    elif algorithm_settings == 2:
-        Fernet_decryption()
+    if algorithm_choice == '1':
+        AES_decryption(decryption_text, key)
+    elif algorithm_choice == '2':
+        Fernet_decryption(decryption_text, key)
     else:
-        RSA_decryption()
+        RSA_decryption(decryption_text, key)
 
 
 def save_settings():
@@ -155,8 +184,10 @@ def settings():
             algorithm_settings = 1
         elif algorithm_settings == 'Fernet':
             algorithm_settings = 2
-        else:
+        elif algorithm_settings == 'RSA':
             algorithm_settings = 3
+        else:
+            algorithm_settings = 4
 
         settings_window = ctk.CTkToplevel()
 
