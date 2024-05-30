@@ -83,6 +83,27 @@ def settings():
 
     if num != 1:
         num += 1
+
+        with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
+            algorithm_settings = file.read()
+        if algorithm_settings == 'AES':
+            algorithm_settings = 1
+        elif algorithm_settings == 'Fernet':
+            algorithm_settings = 2
+        else:
+            algorithm_settings = 3
+
+        with open('settings/theme_settings.txt', 'r', encoding='utf-8') as file:
+            theme_settings = file.read()
+        if theme_settings == '跟随系统':
+            theme_settings = 1
+        elif theme_settings == '自动':
+            theme_settings = 2
+        elif theme_settings == '深色':
+            theme_settings = 3
+        else:
+            theme_settings = 4
+
         settings_window = ctk.CTkToplevel()
 
         EasyAutoWindow(settings_window, window_title="settings", window_width_value=600, window_height_value=150,
@@ -93,10 +114,10 @@ def settings():
         f3 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['AES', 'Fernet', 'RSA'], side=tk.LEFT)
+        algorithm = EasyDropList(f1, options=['AES', 'Fernet', 'RSA'], default=algorithm_settings, side=tk.LEFT)
 
         EasyLabel(f2, text="主题:", side=tk.LEFT)
-        theme = EasyDropList(f2, options=['跟随系统', '自动', '深色', '浅色'], side=tk.LEFT)
+        theme = EasyDropList(f2, options=['跟随系统', '自动', '深色', '浅色'], default=theme_settings, side=tk.LEFT)
 
         EasyButton(f3, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
         EasyButton(f3, text="应用", expand=tk.YES, height=2, side=tk.RIGHT, cmd=application_settings)
