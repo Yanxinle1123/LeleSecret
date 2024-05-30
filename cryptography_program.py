@@ -213,8 +213,7 @@ algorithm_settings = None
 num = 0
 
 window = ctk.CTk()
-EasyAutoWindow(window, window_title="cryptography", minimum_value_x=1312, minimum_value_y=876,
-               window_width_value=1400, window_height_value=890)
+EasyAutoWindow(window, window_title="cryptography", minimum_value_x=803, minimum_value_y=888)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
