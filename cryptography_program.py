@@ -17,11 +17,7 @@ def on_window_close():
     global settings_window, num
 
     if num == 1:
-        with open('settings/algorithm_settings.txt', 'w', encoding='utf-8') as file:
-            file.write('algorithm_settings')
-
-        with open('settings/theme_settings.txt', 'w', encoding='utf-8') as file:
-            file.write('theme_settings')
+        save_settings()
         fade_out(settings_window)
     fade_out(window)
 
@@ -29,25 +25,24 @@ def on_window_close():
 def on_settings_window_close():
     global settings_window, num
 
+    save_settings()
+    fade_out(settings_window)
+    num -= 1
+
+
+def save_settings():
     with open('settings/algorithm_settings.txt', 'w', encoding='utf-8') as file:
         file.write('algorithm_settings')
 
     with open('settings/theme_settings.txt', 'w', encoding='utf-8') as file:
         file.write('theme_settings')
 
-    fade_out(settings_window)
-    num -= 1
-
 
 def quit_window():
     global settings_window, num
 
     if num == 1:
-        with open('settings/algorithm_settings.txt', 'w', encoding='utf-8') as file:
-            file.write('algorithm_settings')
-
-        with open('settings/theme_settings.txt', 'w', encoding='utf-8') as file:
-            file.write('theme_settings')
+        save_settings()
         fade_out(settings_window)
     fade_out(window)
 
