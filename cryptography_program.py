@@ -13,6 +13,15 @@ from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
+def quit_window():
+    global settings_window, num
+
+    if num == 1:
+        save_settings()
+        fade_out(settings_window)
+    fade_out(window)
+
+
 def on_window_close():
     global settings_window, num
 
@@ -28,23 +37,6 @@ def on_settings_window_close():
     save_settings()
     fade_out(settings_window)
     num -= 1
-
-
-def save_settings():
-    with open('settings/algorithm_settings.txt', 'w', encoding='utf-8') as file:
-        file.write('algorithm_settings')
-
-    with open('settings/theme_settings.txt', 'w', encoding='utf-8') as file:
-        file.write('theme_settings')
-
-
-def quit_window():
-    global settings_window, num
-
-    if num == 1:
-        save_settings()
-        fade_out(settings_window)
-    fade_out(window)
 
 
 def replace(text_box, text):
@@ -72,12 +64,22 @@ def decryption():
         EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
 
 
+def save_settings():
+    global algorithm, theme
+
+    with open('settings/algorithm_settings.txt', 'w', encoding='utf-8') as file:
+        file.write(algorithm.get_combo_value())
+
+    with open('settings/theme_settings.txt', 'w', encoding='utf-8') as file:
+        file.write(theme.get_combo_value())
+
+
 def application_settings():
     return
 
 
 def settings():
-    global settings_window, num
+    global settings_window, num, algorithm, theme
 
     if num != 1:
         num += 1
@@ -91,10 +93,10 @@ def settings():
         f3 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        EasyDropList(f1, options=['AES', 'Fernet', 'RSA'], side=tk.LEFT)
+        algorithm = EasyDropList(f1, options=['AES', 'Fernet', 'RSA'], side=tk.LEFT)
 
         EasyLabel(f2, text="主题:", side=tk.LEFT)
-        EasyDropList(f2, options=['跟随系统', '自动', '深色', '浅色'], side=tk.LEFT)
+        theme = EasyDropList(f2, options=['跟随系统', '自动', '深色', '浅色'], side=tk.LEFT)
 
         EasyButton(f3, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
         EasyButton(f3, text="应用", expand=tk.YES, height=2, side=tk.RIGHT, cmd=application_settings)
@@ -105,7 +107,10 @@ def settings():
 
 
 settings_window = None
+algorithm = None
+theme = None
 num = 0
+
 window = ctk.CTk()
 EasyAutoWindow(window, window_title="cryptography", minimum_value_x=1312, minimum_value_y=876,
                window_width_value=1400, window_height_value=890)
