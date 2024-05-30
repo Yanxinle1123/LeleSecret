@@ -143,7 +143,6 @@ def encryption():
         algorithm_settings = 3
     else:
         algorithm_settings = 4
-    print(algorithm_settings)
     if algorithm_settings == 1:
         AES_encryption()
     elif algorithm_settings == 2:
