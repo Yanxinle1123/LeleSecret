@@ -1,3 +1,4 @@
+import binascii
 import tkinter as tk
 
 import customtkinter as ctk
@@ -9,6 +10,8 @@ from LeleEasyTkinter.easy_frame import EasyFrame
 from LeleEasyTkinter.easy_label import EasyLabel
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
+from cryptography.exceptions import InvalidTag
+from cryptography.fernet import InvalidToken
 
 from AES.AES_method import AESEncryptionMethod, AESDecryptionMethod
 from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
@@ -56,7 +59,7 @@ def encryption():
         cipher_text, key = encrypt_obj.encryption()
         replace(key_text, key)
         replace(encryption_text_after, cipher_text)
-    elif alogorithm_settings == 2:
+    elif algorithm_settings == 2:
         CEM = FernetEncryptionMethod(encryption_text_need.get_content())
         key, cipher_text = CEM.encryption()
         replace(key_text, key)
@@ -88,7 +91,7 @@ def decryption():
             EasyWarningWindows("警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
         except Exception as e:
             EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
-    elif alogorithm_settings == 2:
+    elif algorithm_settings == 2:
         try:
             CDM = FernetDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
             plain_text = CDM.decryption()
