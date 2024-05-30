@@ -10,6 +10,8 @@ from LeleEasyTkinter.easy_label import EasyLabel
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 
+from AES.AES_method import AESEncryptionMethod, AESDecryptionMethod
+from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
@@ -47,21 +49,64 @@ def replace(text_box, text):
 
 
 def encryption():
-    REM = RSAEncryptionMethod(encryption_text_need.get_content())
-    cipher_text, key = REM.encryption()
-    replace(key_text, key)
-    replace(encryption_text_after, cipher_text)
+    global algorithm_settings
+
+    if algorithm_settings == 1:
+        encrypt_obj = AESEncryptionMethod(encryption_text_need.get_content())
+        cipher_text, key = encrypt_obj.encryption()
+        replace(key_text, key)
+        replace(encryption_text_after, cipher_text)
+    elif alogorithm_settings == 2:
+        CEM = FernetEncryptionMethod(encryption_text_need.get_content())
+        key, cipher_text = CEM.encryption()
+        replace(key_text, key)
+        replace(encryption_text_after, cipher_text)
+    else:
+        REM = RSAEncryptionMethod(encryption_text_need.get_content())
+        cipher_text, key = REM.encryption()
+        replace(key_text, key)
+        replace(encryption_text_after, cipher_text)
 
 
 def decryption():
-    try:
-        RDM = RSADecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
-        plain_text = RDM.decryption()
-        replace(decryption_text_after, plain_text)
-    except UnicodeDecodeError:
-        EasyWarningWindows("警告", "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
-    except ValueError:
-        EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
+    global algorithm_settings
+
+    if algorithm_settings == 1:
+        try:
+            cipher_text = decryption_text_need.get_content()
+            key = key_text_need.get_content()
+            decrypt_obj = AESDecryptionMethod(cipher_text, key)
+            plain_text = decrypt_obj.decryption()
+            replace(decryption_text_after, plain_text)
+        except TypeError:
+            EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
+        except binascii.Error:
+            EasyWarningWindows("警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
+        except InvalidTag:
+            EasyWarningWindows("警告", "错误\n\n解密失败, 密钥不正确").show_warning()
+        except ValueError:
+            EasyWarningWindows("警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
+        except Exception as e:
+            EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
+    elif alogorithm_settings == 2:
+        try:
+            CDM = FernetDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+            plain_text = CDM.decryption()
+            replace(decryption_text_after, plain_text)
+        except ValueError:
+            EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
+        except InvalidToken:
+            EasyWarningWindows("警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
+    else:
+        try:
+            RDM = RSADecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+            plain_text = RDM.decryption()
+            replace(decryption_text_after, plain_text)
+        except UnicodeDecodeError:
+            EasyWarningWindows("警告",
+                               "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
+        except ValueError:
+            EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
 
 
 def save_settings():
