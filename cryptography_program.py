@@ -22,8 +22,7 @@ def quit_window():
     global settings_window, num
 
     if num == 1:
-        save_settings()
-        fade_out(settings_window)
+        on_settings_window_close2()
     fade_out(window)
 
 
@@ -31,8 +30,7 @@ def on_window_close():
     global settings_window, num
 
     if num == 1:
-        save_settings()
-        fade_out(settings_window)
+        on_settings_window_close2()
     fade_out(window)
 
 
@@ -40,6 +38,16 @@ def on_settings_window_close():
     global settings_window, num
 
     save_settings()
+    fade_out(settings_window)
+    num -= 1
+
+
+def on_settings_window_close2():
+    global settings_window, num
+
+    result = EasyWarningWindows("是/否", "是否保存更改？").show_warning()
+    if result:
+        save_settings()
     fade_out(settings_window)
     num -= 1
 
@@ -203,7 +211,7 @@ def settings():
 
         fade_in(settings_window)
         settings_window.attributes('-topmost', 'true')
-        settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close)
+        settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
 
 
 settings_window = None
