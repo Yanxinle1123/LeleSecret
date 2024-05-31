@@ -70,7 +70,7 @@ def get_data():
 def AES_encryption():
     encrypt_obj = AESEncryptionMethod(encryption_text_need.get_content())
     cipher_text, key = encrypt_obj.encryption()
-    key = f'1{key}'
+    key = f'2{key}'
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
@@ -78,7 +78,7 @@ def AES_encryption():
 def Fernet_encryption():
     CEM = FernetEncryptionMethod(encryption_text_need.get_content())
     key, cipher_text = CEM.encryption()
-    key = f'2{key}'
+    key = f'3{key}'
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
@@ -86,7 +86,7 @@ def Fernet_encryption():
 def RSA_encryption():
     REM = RSAEncryptionMethod(encryption_text_need.get_content())
     cipher_text, key = REM.encryption()
-    key = f'3{key}'
+    key = f'4{key}'
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
 
@@ -143,30 +143,30 @@ def encryption():
 
     with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
         algorithm_settings = file.read()
-    if algorithm_settings == 'AES':
+    if algorithm_settings == '自动':
         algorithm_settings = 1
-    elif algorithm_settings == 'Fernet':
+    elif algorithm_settings == 'AES':
         algorithm_settings = 2
-    elif algorithm_settings == 'RSA':
+    elif algorithm_settings == 'Fernet':
         algorithm_settings = 3
     else:
         algorithm_settings = 4
     if algorithm_settings == 1:
-        AES_encryption()
-    elif algorithm_settings == 2:
-        Fernet_encryption()
-    elif algorithm_settings == 3:
-        RSA_encryption()
-    else:
         auto_encryption()
+    elif algorithm_settings == 2:
+        AES_encryption()
+    elif algorithm_settings == 3:
+        Fernet_encryption()
+    else:
+        RSA_encryption()
 
 
 def decryption():
     decryption_text, algorithm_choice, key = get_data()
 
-    if algorithm_choice == '1':
+    if algorithm_choice == '2':
         AES_decryption(decryption_text, key)
-    elif algorithm_choice == '2':
+    elif algorithm_choice == '3':
         Fernet_decryption(decryption_text, key)
     else:
         RSA_decryption(decryption_text, key)
@@ -187,11 +187,11 @@ def settings():
 
         with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
-        if algorithm_settings == 'AES':
+        if algorithm_settings == '自动':
             algorithm_settings = 1
-        elif algorithm_settings == 'Fernet':
+        elif algorithm_settings == 'AES':
             algorithm_settings = 2
-        elif algorithm_settings == 'RSA':
+        elif algorithm_settings == 'Fernet':
             algorithm_settings = 3
         else:
             algorithm_settings = 4
@@ -205,7 +205,7 @@ def settings():
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['AES', 'Fernet', 'RSA', '自动'], default=algorithm_settings, side=tk.LEFT)
+        algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA'], default=algorithm_settings, side=tk.LEFT)
 
         EasyButton(f2, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
 
