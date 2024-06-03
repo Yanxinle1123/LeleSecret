@@ -31,4 +31,4 @@ print("密钥:", key.hex())
 
 # 解密
 decrypted_text = decrypt(ciphertext, key, nonce)
-print("明文:", decrypted_text.hex())
+print("明文:", decrypted_text.decode('utf-8'))
