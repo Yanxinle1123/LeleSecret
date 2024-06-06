@@ -13,6 +13,7 @@ from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 from cryptography.exceptions import InvalidTag
 from cryptography.fernet import InvalidToken
 
+from AEAD.AEAD_method import AEADEncryptionMethod, AEADDecryptionMethod
 from AES.AES_method import AESEncryptionMethod, AESDecryptionMethod
 from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
@@ -91,6 +92,14 @@ def RSA_encryption():
     replace(encryption_text_after, cipher_text)
 
 
+def AEAD_encryption():
+    AEADEM = AEADEncryptionMethod(encryption_text_need.get_content())
+    cipher_text, key = AEADEM.encryption()
+    key = f'5{key}'
+    replace(key_text, key)
+    replace(encryption_text_after, cipher_text)
+
+
 def auto_encryption():
     if len(encryption_text_need.get_content()) <= 2000:
         RSA_encryption()
@@ -136,6 +145,19 @@ def RSA_decryption(decryption_text, key):
                            "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
         EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
+    except IndexError:
+        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
+
+
+def AEAD_decryption(decryption_text, key):
+    try:
+        AEADDM = AEADDecryptionMethod(decryption_text, key)
+        plain_text = AEADDM.decryption()
+        replace(decryption_text_after, plain_text)
+    except ValueError:
+        EasyWarningWindows("警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
+    except IndexError:
+        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
 
 
 def encryption():
@@ -149,16 +171,20 @@ def encryption():
         algorithm_settings = 2
     elif algorithm_settings == 'Fernet':
         algorithm_settings = 3
-    else:
+    elif algorithm_settings == 'RSA':
         algorithm_settings = 4
+    elif algorithm_settings == 'AEAD':
+        algorithm_settings = 5
     if algorithm_settings == 1:
         auto_encryption()
     elif algorithm_settings == 2:
         AES_encryption()
     elif algorithm_settings == 3:
         Fernet_encryption()
-    else:
+    elif algorithm_settings == 4:
         RSA_encryption()
+    elif algorithm_settings == 5:
+        AEAD_encryption()
 
 
 def decryption():
@@ -168,8 +194,10 @@ def decryption():
         AES_decryption(decryption_text, key)
     elif algorithm_choice == '3':
         Fernet_decryption(decryption_text, key)
-    else:
+    elif algorithm_choice == '4':
         RSA_decryption(decryption_text, key)
+    elif algorithm_choice == '5':
+        AEAD_decryption(decryption_text, key)
 
 
 def save_settings():
@@ -193,8 +221,10 @@ def settings():
             algorithm_settings = 2
         elif algorithm_settings == 'Fernet':
             algorithm_settings = 3
-        else:
+        elif algorithm_settings == 'RSA':
             algorithm_settings = 4
+        elif algorithm_settings == 'AEAD':
+            algorithm_settings = 5
 
         settings_window = ctk.CTkToplevel()
 
@@ -205,7 +235,8 @@ def settings():
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA'], default=algorithm_settings, side=tk.LEFT)
+        algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA', 'AEAD'], default=algorithm_settings,
+                                 side=tk.LEFT)
 
         EasyButton(f2, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
 
@@ -220,7 +251,7 @@ algorithm_settings = None
 num = 0
 
 window = ctk.CTk()
-EasyAutoWindow(window, window_title="cryptography", minimum_value_x=803, minimum_value_y=888)
+EasyAutoWindow(window, window_title="cryptography", minimum_value_x=500, minimum_value_y=840)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
@@ -259,9 +290,9 @@ decryption_text_after.get_text().config(state="disabled")
 
 EasyButton(f24, text="解密", fill=tk.BOTH, side=tk.TOP, expand=tk.YES, height=2, cmd=decryption)
 
-EasyButton(window, text="退出", fill=tk.BOTH, side=tk.TOP, expand=tk.NO, height=2, cmd=quit_window)
+EasyButton(window, text="退出", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=quit_window)
 
-EasyButton(window, text="设置", side=tk.RIGHT, width=5, height=2, cmd=settings)
+EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=settings)
 
 fade_in(window, ms=500)
 window.protocol("WM_DELETE_WINDOW", on_window_close)
