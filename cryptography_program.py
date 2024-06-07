@@ -62,11 +62,15 @@ def replace(text_box, text):
 
 
 def get_data():
-    decryption_text = decryption_text_need.get_content()
-    key_and_algorithm = key_text_need.get_content()
-    algorithm_choice = key_and_algorithm[0]
-    key = key_and_algorithm[1:]
-    return decryption_text, algorithm_choice, key
+    try:
+        decryption_text = decryption_text_need.get_content()
+        key_and_algorithm = key_text_need.get_content()
+        algorithm_choice = key_and_algorithm[0]
+        key = key_and_algorithm[1:]
+        return decryption_text, algorithm_choice, key
+    except IndexError:
+        window.bell()
+        EasyWarningWindows("错误", "错误\n\n密文或密钥为空").show_warning()
 
 
 def AES_encryption():
@@ -114,14 +118,19 @@ def AES_decryption(decryption_text, key):
         plain_text = decrypt_obj.decryption()
         replace(decryption_text_after, plain_text)
     except TypeError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
     except binascii.Error:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
     except InvalidTag:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n解密失败, 密钥不正确").show_warning()
     except ValueError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
     except Exception as e:
+        window.bell()
         EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
 
 
@@ -131,8 +140,10 @@ def Fernet_decryption(decryption_text, key):
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
     except InvalidToken:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
 
 
@@ -142,11 +153,14 @@ def RSA_decryption(decryption_text, key):
         plain_text = RDM.decryption()
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
+        window.bell()
         EasyWarningWindows("警告",
                            "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
     except IndexError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
 
 
@@ -156,8 +170,10 @@ def AEAD_decryption(decryption_text, key):
         plain_text = AEADDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
     except IndexError:
+        window.bell()
         EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
 
 
@@ -189,16 +205,19 @@ def encryption():
 
 
 def decryption():
-    decryption_text, algorithm_choice, key = get_data()
+    try:
+        decryption_text, algorithm_choice, key = get_data()
 
-    if algorithm_choice == '2':
-        AES_decryption(decryption_text, key)
-    elif algorithm_choice == '3':
-        Fernet_decryption(decryption_text, key)
-    elif algorithm_choice == '4':
-        RSA_decryption(decryption_text, key)
-    elif algorithm_choice == '5':
-        AEAD_decryption(decryption_text, key)
+        if algorithm_choice == '2':
+            AES_decryption(decryption_text, key)
+        elif algorithm_choice == '3':
+            Fernet_decryption(decryption_text, key)
+        elif algorithm_choice == '4':
+            RSA_decryption(decryption_text, key)
+        elif algorithm_choice == '5':
+            AEAD_decryption(decryption_text, key)
+    except TypeError:
+        return
 
 
 def save_settings():
@@ -229,7 +248,7 @@ def settings():
 
         settings_window = ctk.CTkToplevel()
 
-        EasyAutoWindow(settings_window, window_title="settings", window_width_value=600, window_height_value=150,
+        EasyAutoWindow(settings_window, window_title="设置", window_width_value=600, window_height_value=150,
                        adjust_x=False, adjust_y=False)
 
         f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
@@ -244,6 +263,9 @@ def settings():
         fade_in(settings_window, ms=4)
         settings_window.attributes('-topmost', 'true')
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
+    else:
+        window.bell()
+        EasyWarningWindows("信息", "此窗口已打开").show_warning()
 
 
 def instructions():
@@ -262,6 +284,9 @@ def instructions():
 
         instructions_window.attributes('-topmost', 'true')
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
+    else:
+        window.bell()
+        EasyWarningWindows("信息", "此窗口已打开").show_warning()
 
 
 settings_window = None
