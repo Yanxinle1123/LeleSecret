@@ -20,37 +20,38 @@ from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
 def quit_window():
-    global settings_window, num
+    global settings_window, settings_num, instructions_num
 
-    if num == 1:
+    if settings_num == 1:
         on_settings_window_close2()
-    fade_out(window)
-
-
-def on_window_close():
-    global settings_window, num
-
-    if num == 1:
-        on_settings_window_close2()
-    fade_out(window)
+    if instructions_num == 1:
+        on_instructions_window_close()
+    fade_out(window, ms=20)
 
 
 def on_settings_window_close():
-    global settings_window, num
+    global settings_window, settings_num
 
     save_settings()
-    fade_out(settings_window)
-    num -= 1
+    fade_out(settings_window, ms=20)
+    settings_num -= 1
 
 
 def on_settings_window_close2():
-    global settings_window, num
+    global settings_window, settings_num
 
     result = EasyWarningWindows("是/否", "是否保存更改？").show_warning()
     if result:
         save_settings()
-    fade_out(settings_window)
-    num -= 1
+    fade_out(settings_window, ms=20)
+    settings_num -= 1
+
+
+def on_instructions_window_close():
+    global instructions_window, instructions_num
+
+    fade_out(instructions_window, ms=20)
+    instructions_num -= 1
 
 
 def replace(text_box, text):
@@ -208,10 +209,10 @@ def save_settings():
 
 
 def settings():
-    global settings_window, num, algorithm, algorithm_settings
+    global settings_window, settings_num, algorithm, algorithm_settings
 
-    if num != 1:
-        num += 1
+    if settings_num != 1:
+        settings_num += 1
 
         with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
@@ -240,18 +241,38 @@ def settings():
 
         EasyButton(f2, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
 
-        fade_in(settings_window)
+        fade_in(settings_window, ms=20)
         settings_window.attributes('-topmost', 'true')
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
+
+
+def instructions():
+    global instructions_num, instructions_window
+
+    if instructions_num != 1:
+        instructions_num += 1
+        instructions_window = ctk.CTkToplevel()
+
+        EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
+                       adjust_x=False, adjust_y=False)
+
+        EasyLabel(instructions_window, text="hello", fill=tk.Y, expand=tk.YES)
+
+        fade_in(instructions_window, ms=20)
+
+        instructions_window.attributes('-topmost', 'true')
+        instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
 
 
 settings_window = None
 algorithm = None
 algorithm_settings = None
-num = 0
+instructions_window = None
+instructions_num = 0
+settings_num = 0
 
 window = ctk.CTk()
-EasyAutoWindow(window, window_title="cryptography", minimum_value_x=500, minimum_value_y=840)
+EasyAutoWindow(window, window_title="cryptography", minimum_value_x=640, minimum_value_y=870)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
@@ -294,6 +315,8 @@ EasyButton(window, text="退出", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 
 EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=settings)
 
-fade_in(window, ms=500)
-window.protocol("WM_DELETE_WINDOW", on_window_close)
+EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
+
+fade_in(window, ms=20)
+window.protocol("WM_DELETE_WINDOW", quit_window)
 window.mainloop()
