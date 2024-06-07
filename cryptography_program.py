@@ -26,14 +26,14 @@ def quit_window():
         on_settings_window_close2()
     if instructions_num == 1:
         on_instructions_window_close()
-    fade_out(window, ms=20)
+    fade_out(window, ms=4)
 
 
 def on_settings_window_close():
     global settings_window, settings_num
 
     save_settings()
-    fade_out(settings_window, ms=20)
+    fade_out(settings_window, ms=4)
     settings_num -= 1
 
 
@@ -43,14 +43,14 @@ def on_settings_window_close2():
     result = EasyWarningWindows("是/否", "是否保存更改？").show_warning()
     if result:
         save_settings()
-    fade_out(settings_window, ms=20)
+    fade_out(settings_window, ms=4)
     settings_num -= 1
 
 
 def on_instructions_window_close():
     global instructions_window, instructions_num
 
-    fade_out(instructions_window, ms=20)
+    fade_out(instructions_window, ms=4)
     instructions_num -= 1
 
 
@@ -102,10 +102,10 @@ def AEAD_encryption():
 
 
 def auto_encryption():
-    if len(encryption_text_need.get_content()) <= 2000:
+    if len(encryption_text_need.get_content().encode('utf-8')) <= 50:
         RSA_encryption()
     else:
-        AES_encryption()
+        AEAD_encryption()
 
 
 def AES_decryption(decryption_text, key):
@@ -241,7 +241,7 @@ def settings():
 
         EasyButton(f2, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
 
-        fade_in(settings_window, ms=20)
+        fade_in(settings_window, ms=4)
         settings_window.attributes('-topmost', 'true')
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
 
@@ -258,7 +258,7 @@ def instructions():
 
         EasyLabel(instructions_window, text="hello", fill=tk.Y, expand=tk.YES)
 
-        fade_in(instructions_window, ms=20)
+        fade_in(instructions_window, ms=4)
 
         instructions_window.attributes('-topmost', 'true')
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
@@ -317,6 +317,6 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
-fade_in(window, ms=20)
+fade_in(window, ms=4)
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.mainloop()
