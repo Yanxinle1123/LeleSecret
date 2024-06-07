@@ -274,11 +274,16 @@ def instructions():
     if instructions_num != 1:
         instructions_num += 1
         instructions_window = ctk.CTkToplevel()
+        instructions_text = ("加密方法: 将需要加密的文本输入到指定的文本框内, 然后点击加密按钮, 加密后的文本和密钥就会显示在指定的文本框"
+                             "内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然后点"
+                             "击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注意: 如果解密出错, 程"
+                             "序会弹出错误提示, 有时候程序在检测到错误的时候会静默处理, 不会弹出提示)")
 
         EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
-                       adjust_x=False, adjust_y=False)
+                       minimum_value_x=230, minimum_value_y=170)
 
-        EasyLabel(instructions_window, text="hello", fill=tk.Y, expand=tk.YES)
+        instructions_box = EasyMultiText(instructions_window, expand=tk.YES, fill=tk.BOTH)
+        replace(instructions_box, instructions_text)
 
         fade_in(instructions_window, ms=4)
 
