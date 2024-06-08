@@ -40,7 +40,7 @@ def on_settings_window_close():
 def on_settings_window_close2():
     global settings_window, settings_num
 
-    result = EasyWarningWindows("是/否", "是否保存更改？").show_warning()
+    result = EasyWarningWindows(settings_window, "是/否", "是否保存更改？").show_warning()
     if result:
         save_settings()
     fade_out(settings_window, ms=4)
@@ -376,6 +376,5 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
 fade_in(window, ms=4)
-window.attributes('-topmost', 'true')
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.mainloop()
