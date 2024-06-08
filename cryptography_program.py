@@ -305,7 +305,7 @@ def instructions():
         instructions_text = ("加密方法: 将需要加密的文本输入到指定的文本框内, 然后点击加密按钮, 加密后的文本和密钥就会显示在指定的文本框"
                              "内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然后"
                              "点击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注: 如果解密出错, 程"
-                             "序会弹出错误提示)")
+                             "序会弹出错误提示, 如果没有看见弹窗, 可能是被设置或者其他窗口挡住了)")
 
         EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
                        minimum_value_x=230, minimum_value_y=170)
