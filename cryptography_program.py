@@ -293,7 +293,7 @@ def settings():
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
     else:
         window.bell()
-        EasyWarningWindows(window, "信息", "此窗口已打开").show_warning()
+        EasyWarningWindows(settings_window, "信息", "此窗口已打开").show_warning()
 
 
 def instructions():
@@ -319,7 +319,7 @@ def instructions():
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
     else:
         window.bell()
-        EasyWarningWindows(window, "信息", "此窗口已打开").show_warning()
+        EasyWarningWindows(instructions_window, "信息", "此窗口已打开").show_warning()
 
 
 settings_window = None
@@ -376,5 +376,6 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
 fade_in(window, ms=4)
+window.attributes('-topmost', 'true')
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.mainloop()
