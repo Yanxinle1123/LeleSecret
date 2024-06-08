@@ -70,11 +70,16 @@ def get_data():
         return decryption_text, algorithm_choice, key
     except IndexError:
         window.bell()
-        EasyWarningWindows("错误", "错误\n\n密文或密钥为空").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n密文或密钥不正确").show_warning()
 
 
 def AES_encryption():
-    encrypt_obj = AESEncryptionMethod(encryption_text_need.get_content())
+    encryption_need = encryption_text_need.get_content()
+    if encryption_need == '':
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n请输入需要加密的文本").show_warning()
+        return
+    encrypt_obj = AESEncryptionMethod(encryption_need)
     cipher_text, key = encrypt_obj.encryption()
     key = f'2{key}'
     replace(key_text, key)
@@ -82,7 +87,12 @@ def AES_encryption():
 
 
 def Fernet_encryption():
-    CEM = FernetEncryptionMethod(encryption_text_need.get_content())
+    encryption_need = encryption_text_need.get_content()
+    if encryption_need == '':
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n请输入需要加密的文本").show_warning()
+        return
+    CEM = FernetEncryptionMethod(encryption_need)
     key, cipher_text = CEM.encryption()
     key = f'3{key}'
     replace(key_text, key)
@@ -90,7 +100,12 @@ def Fernet_encryption():
 
 
 def RSA_encryption():
-    REM = RSAEncryptionMethod(encryption_text_need.get_content())
+    encryption_need = encryption_text_need.get_content()
+    if encryption_need == '':
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n请输入需要加密的文本").show_warning()
+        return
+    REM = RSAEncryptionMethod(encryption_need)
     cipher_text, key = REM.encryption()
     key = f'4{key}'
     replace(key_text, key)
@@ -98,7 +113,12 @@ def RSA_encryption():
 
 
 def AEAD_encryption():
-    AEADEM = AEADEncryptionMethod(encryption_text_need.get_content())
+    encryption_need = encryption_text_need.get_content()
+    if encryption_need == '':
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n请输入需要加密的文本").show_warning()
+        return
+    AEADEM = AEADEncryptionMethod(encryption_need)
     cipher_text, key = AEADEM.encryption()
     key = f'5{key}'
     replace(key_text, key)
@@ -106,7 +126,8 @@ def AEAD_encryption():
 
 
 def auto_encryption():
-    if len(encryption_text_need.get_content().encode('utf-8')) <= 50:
+    encryption_need = encryption_text_need.get_content()
+    if len(encryption_need.encode('utf-8')) <= 50:
         RSA_encryption()
     else:
         AEAD_encryption()
@@ -119,16 +140,16 @@ def AES_decryption(decryption_text, key):
         replace(decryption_text_after, plain_text)
     except TypeError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
     except binascii.Error:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
     except InvalidTag:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥不正确").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥不正确").show_warning()
     except ValueError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
     except Exception as e:
         window.bell()
         EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
@@ -141,10 +162,10 @@ def Fernet_decryption(decryption_text, key):
         replace(decryption_text_after, plain_text)
     except ValueError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
     except InvalidToken:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
 
 
 def RSA_decryption(decryption_text, key):
@@ -154,14 +175,14 @@ def RSA_decryption(decryption_text, key):
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
         window.bell()
-        EasyWarningWindows("警告",
+        EasyWarningWindows(window, "警告",
                            "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n输入的密钥或密文不正确").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n输入的密钥或密文不正确").show_warning()
     except IndexError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文错误").show_warning()
 
 
 def AEAD_decryption(decryption_text, key):
@@ -171,10 +192,10 @@ def AEAD_decryption(decryption_text, key):
         replace(decryption_text_after, plain_text)
     except ValueError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
     except IndexError:
         window.bell()
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文错误").show_warning()
 
 
 def encryption():
@@ -208,6 +229,10 @@ def decryption():
     try:
         decryption_text, algorithm_choice, key = get_data()
 
+        if decryption_text == '':
+            window.bell()
+            EasyWarningWindows(window, "警告", "错误\n\n密文为空").show_warning()
+
         if algorithm_choice == '2':
             AES_decryption(decryption_text, key)
         elif algorithm_choice == '3':
@@ -216,6 +241,9 @@ def decryption():
             RSA_decryption(decryption_text, key)
         elif algorithm_choice == '5':
             AEAD_decryption(decryption_text, key)
+        else:
+            window.bell()
+            EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
     except TypeError:
         return
 
@@ -265,7 +293,7 @@ def settings():
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
     else:
         window.bell()
-        EasyWarningWindows("信息", "此窗口已打开").show_warning()
+        EasyWarningWindows(window, "信息", "此窗口已打开").show_warning()
 
 
 def instructions():
@@ -275,9 +303,9 @@ def instructions():
         instructions_num += 1
         instructions_window = ctk.CTkToplevel()
         instructions_text = ("加密方法: 将需要加密的文本输入到指定的文本框内, 然后点击加密按钮, 加密后的文本和密钥就会显示在指定的文本框"
-                             "内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然后点"
-                             "击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注意: 如果解密出错, 程"
-                             "序会弹出错误提示, 有时候程序在检测到错误的时候会静默处理, 不会弹出提示)")
+                             "内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然后"
+                             "点击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注: 如果解密出错, 程"
+                             "序会弹出错误提示)")
 
         EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
                        minimum_value_x=230, minimum_value_y=170)
@@ -291,7 +319,7 @@ def instructions():
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
     else:
         window.bell()
-        EasyWarningWindows("信息", "此窗口已打开").show_warning()
+        EasyWarningWindows(window, "信息", "此窗口已打开").show_warning()
 
 
 settings_window = None
