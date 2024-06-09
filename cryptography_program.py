@@ -1,7 +1,6 @@
 import binascii
 import tkinter as tk
 
-import customtkinter as ctk
 from LeleEasyTkinter.easy_auto_window import EasyAutoWindow
 from LeleEasyTkinter.easy_button import EasyButton
 from LeleEasyTkinter.easy_drop_list import EasyDropList
@@ -281,7 +280,7 @@ def settings():
         elif algorithm_settings == 'AEAD':
             algorithm_settings = 5
 
-        settings_window = ctk.CTkToplevel()
+        settings_window = tk.Tk()
 
         EasyAutoWindow(settings_window, window_title="设置", window_width_value=600, window_height_value=150,
                        adjust_x=False, adjust_y=False)
@@ -314,7 +313,7 @@ def instructions():
 
     if instructions_num != 1:
         instructions_num += 1
-        instructions_window = ctk.CTkToplevel()
+        instructions_window = tk.Tk()
         instructions_text = ("加密方法: 将需要加密的文本输入到指定的文本框内, 然后点击加密按钮, 加密后的文本和密钥就会显示在指定的文本框"
                              "内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然后"
                              "点击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注: 如果解密出错, 程"
@@ -344,7 +343,7 @@ instructions_window = None
 instructions_num = 0
 settings_num = 0
 
-window = ctk.CTk()
+window = tk.Tk()
 EasyAutoWindow(window, window_title="cryptography", minimum_value_x=640, minimum_value_y=870)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
