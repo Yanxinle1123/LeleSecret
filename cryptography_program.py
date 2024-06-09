@@ -32,7 +32,6 @@ def quit_window():
 def on_settings_window_close():
     global settings_window, settings_num
 
-    save_settings()
     fade_out(settings_window, ms=4)
     settings_num -= 1
 
@@ -255,6 +254,12 @@ def save_settings():
         file.write(algorithm.get_combo_value())
 
 
+def reset_settings():
+    global algorithm
+
+    algorithm.set_combo_value('自动')
+
+
 def settings():
     global settings_window, settings_num, algorithm, algorithm_settings
 
@@ -286,10 +291,16 @@ def settings():
         algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA', 'AEAD'], default=algorithm_settings,
                                  side=tk.LEFT)
 
-        EasyButton(f2, text="保存并退出设置", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT)
+        EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
+                   fill=tk.X)
+
+        EasyButton(f2, text="退出", expand=tk.YES, height=2, cmd=on_settings_window_close, side=tk.LEFT,
+                   fill=tk.X)
+
+        EasyButton(f2, text="重置", expand=tk.YES, height=2, cmd=reset_settings, side=tk.LEFT,
+                   fill=tk.X)
 
         fade_in(settings_window, ms=4)
-        settings_window.attributes('-topmost', 'true')
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
     else:
         window.bell()
@@ -315,7 +326,6 @@ def instructions():
 
         fade_in(instructions_window, ms=4)
 
-        instructions_window.attributes('-topmost', 'true')
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
     else:
         window.bell()
