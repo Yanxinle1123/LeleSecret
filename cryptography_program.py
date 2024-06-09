@@ -257,7 +257,9 @@ def save_settings():
 def reset_settings():
     global algorithm
 
-    algorithm.set_combo_value('自动')
+    result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
+    if result:
+        algorithm.set_combo_value('自动')
 
 
 def settings():
