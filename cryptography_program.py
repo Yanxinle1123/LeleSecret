@@ -1,4 +1,6 @@
 import binascii
+import os
+import sys
 import tkinter as tk
 
 from LeleEasyTkinter.easy_auto_window import EasyAutoWindow
@@ -16,6 +18,17 @@ from AEAD.AEAD_method import AEADEncryptionMethod, AEADDecryptionMethod
 from AES.AES_method import AESEncryptionMethod, AESDecryptionMethod
 from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
+
+
+def resource_path(relative_path):
+    home_dir = os.path.expanduser('~')
+    file_path = os.path.join(home_dir, relative_path)
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, file_path)
+    return file_path
+
+
+cryptography_settings = resource_path('algorithm_settings.txt')
 
 
 def quit_window():
@@ -199,7 +212,7 @@ def AEAD_decryption(decryption_text, key):
 def encryption():
     global algorithm_settings
 
-    with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
+    with open(cryptography_settings, 'r', encoding='utf-8') as file:
         algorithm_settings = file.read()
     if algorithm_settings == '自动':
         algorithm_settings = 1
@@ -249,7 +262,7 @@ def decryption():
 def save_settings():
     global algorithm
 
-    with open('settings/algorithm_settings.txt', 'w', encoding='utf-8') as file:
+    with open(cryptography_settings, 'w', encoding='utf-8') as file:
         file.write(algorithm.get_combo_value())
 
 
@@ -281,7 +294,7 @@ def settings():
     if settings_num != 1:
         settings_num += 1
 
-        with open('settings/algorithm_settings.txt', 'r', encoding='utf-8') as file:
+        with open(cryptography_settings, 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
         if algorithm_settings == '自动':
             algorithm_settings = 1
@@ -404,5 +417,6 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
 fade_in(window, ms=4)
+
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.mainloop()
