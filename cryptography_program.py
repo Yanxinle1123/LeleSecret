@@ -261,6 +261,20 @@ def reset_settings():
         algorithm.set_combo_value('自动')
 
 
+def center_window(root):
+    width = root.winfo_width()
+    height = root.winfo_height()
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    # 计算窗口应该在屏幕上的位置
+    x = (screen_width - width) / 2
+    y = (screen_height - height) / 2
+
+    # 设置窗口的位置
+    root.geometry('%dx%d+%d+%d' % (width, height, x, y))
+
+
 def settings():
     global settings_window, settings_num, algorithm, algorithm_settings
 
@@ -304,8 +318,8 @@ def settings():
         fade_in(settings_window, ms=4)
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
     else:
-        window.bell()
-        EasyWarningWindows(settings_window, "信息", "此窗口已打开").show_warning()
+        center_window(settings_window)
+        settings_window.lift()
 
 
 def instructions():
@@ -332,8 +346,8 @@ def instructions():
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
     else:
-        window.bell()
-        EasyWarningWindows(instructions_window, "信息", "此窗口已打开").show_warning()
+        center_window(instructions_window)
+        instructions_window.lift()
 
 
 settings_window = None
