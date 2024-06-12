@@ -20,6 +20,18 @@ from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
+def check_and_create_file(filename):
+    home_dir = os.path.expanduser('~')
+    file_path = os.path.join(home_dir, filename)
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as file:
+            file.write("自动")
+
+
+check_and_create_file("algorithm_settings.txt")
+
+
 def resource_path(relative_path):
     home_dir = os.path.expanduser('~')
     file_path = os.path.join(home_dir, relative_path)
