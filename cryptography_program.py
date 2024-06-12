@@ -227,7 +227,7 @@ def encryption():
     result = True
     if len(encryption_text_need.get_content().encode('utf-8')) >= 10000:
         result = EasyWarningWindows(window, "是/否",
-                                    "您需要加密的字数已经超过了10000字节个字节, 继续加密很可能导致程序卡死或无法退出, 是否继续加密？").show_warning()
+                                    "您需要加密的字数已经超过了10000个字节, 继续加密很可能导致程序卡死或无法退出, 是否继续加密？").show_warning()
     if result:
         with open(cryptography_settings, 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
@@ -257,21 +257,26 @@ def decryption():
     try:
         decryption_text, algorithm_choice, key = get_data()
 
-        if decryption_text == '':
-            window.bell()
-            EasyWarningWindows(window, "警告", "错误\n\n密文为空").show_warning()
+        result = True
+        if len(decryption_text) >= 10000:
+            result = EasyWarningWindows(window, "是/否",
+                                        "您需要解密的字数已经超过了10000个字节, 继续解密很可能导致程序卡死或无法退出, 是否继续解密？").show_warning()
+        if result:
+            if decryption_text == '':
+                window.bell()
+                EasyWarningWindows(window, "警告", "错误\n\n密文为空").show_warning()
 
-        if algorithm_choice == '2':
-            AES_decryption(decryption_text, key)
-        elif algorithm_choice == '3':
-            Fernet_decryption(decryption_text, key)
-        elif algorithm_choice == '4':
-            RSA_decryption(decryption_text, key)
-        elif algorithm_choice == '5':
-            AEAD_decryption(decryption_text, key)
-        else:
-            window.bell()
-            EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
+            if algorithm_choice == '2':
+                AES_decryption(decryption_text, key)
+            elif algorithm_choice == '3':
+                Fernet_decryption(decryption_text, key)
+            elif algorithm_choice == '4':
+                RSA_decryption(decryption_text, key)
+            elif algorithm_choice == '5':
+                AEAD_decryption(decryption_text, key)
+            else:
+                window.bell()
+                EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
     except TypeError:
         return
 
