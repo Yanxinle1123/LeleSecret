@@ -50,13 +50,13 @@ def quit_window():
         on_settings_window_close2()
     if instructions_num == 1:
         on_instructions_window_close()
-    fade_out(window, ms=4)
+    fade_out(window)
 
 
 def on_settings_window_close():
     global settings_window, settings_num
 
-    fade_out(settings_window, ms=4)
+    fade_out(settings_window)
     settings_num -= 1
 
 
@@ -66,14 +66,14 @@ def on_settings_window_close2():
     result = EasyWarningWindows(settings_window, "是/否", "是否保存更改？").show_warning()
     if result:
         save_settings()
-    fade_out(settings_window, ms=4)
+    fade_out(settings_window)
     settings_num -= 1
 
 
 def on_instructions_window_close():
     global instructions_window, instructions_num
 
-    fade_out(instructions_window, ms=4)
+    fade_out(instructions_window)
     instructions_num -= 1
 
 
@@ -340,7 +340,7 @@ def settings():
         EasyButton(f2, text="重置", expand=tk.YES, height=2, cmd=reset_settings, side=tk.LEFT,
                    fill=tk.X)
 
-        fade_in(settings_window, ms=4)
+        fade_in(settings_window)
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
     else:
         center_window(settings_window)
@@ -367,7 +367,7 @@ def instructions():
         instructions_box = EasyMultiText(instructions_window, expand=tk.YES, fill=tk.BOTH)
         replace(instructions_box, instructions_text)
 
-        fade_in(instructions_window, ms=4)
+        fade_in(instructions_window)
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
     else:
@@ -428,7 +428,7 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
-fade_in(window, ms=4)
+fade_in(window)
 
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.mainloop()
