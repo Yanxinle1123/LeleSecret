@@ -224,28 +224,33 @@ def AEAD_decryption(decryption_text, key):
 def encryption():
     global algorithm_settings
 
-    with open(cryptography_settings, 'r', encoding='utf-8') as file:
-        algorithm_settings = file.read()
-    if algorithm_settings == '自动':
-        algorithm_settings = 1
-    elif algorithm_settings == 'AES':
-        algorithm_settings = 2
-    elif algorithm_settings == 'Fernet':
-        algorithm_settings = 3
-    elif algorithm_settings == 'RSA':
-        algorithm_settings = 4
-    elif algorithm_settings == 'AEAD':
-        algorithm_settings = 5
-    if algorithm_settings == 1:
-        auto_encryption()
-    elif algorithm_settings == 2:
-        AES_encryption()
-    elif algorithm_settings == 3:
-        Fernet_encryption()
-    elif algorithm_settings == 4:
-        RSA_encryption()
-    elif algorithm_settings == 5:
-        AEAD_encryption()
+    result = True
+    if len(encryption_text_need.get_content().encode('utf-8')) >= 10000:
+        result = EasyWarningWindows(window, "是/否",
+                                    "您需要加密的字数已经超过了10000字节个字节, 继续加密很可能导致程序卡死或无法退出, 是否继续加密？").show_warning()
+    if result:
+        with open(cryptography_settings, 'r', encoding='utf-8') as file:
+            algorithm_settings = file.read()
+        if algorithm_settings == '自动':
+            algorithm_settings = 1
+        elif algorithm_settings == 'AES':
+            algorithm_settings = 2
+        elif algorithm_settings == 'Fernet':
+            algorithm_settings = 3
+        elif algorithm_settings == 'RSA':
+            algorithm_settings = 4
+        elif algorithm_settings == 'AEAD':
+            algorithm_settings = 5
+        if algorithm_settings == 1:
+            auto_encryption()
+        elif algorithm_settings == 2:
+            AES_encryption()
+        elif algorithm_settings == 3:
+            Fernet_encryption()
+        elif algorithm_settings == 4:
+            RSA_encryption()
+        elif algorithm_settings == 5:
+            AEAD_encryption()
 
 
 def decryption():
