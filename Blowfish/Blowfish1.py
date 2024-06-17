@@ -12,16 +12,18 @@ cipher = Cipher(algorithms.Blowfish(key), modes.ECB(), backend=default_backend()
 encryptor = cipher.encryptor()
 
 # 加密数据（注意：Blowfish需要8字节的倍数）
-plaintext = "Hello, world!123你好"
+plaintext = "Hello, world你好!123"
 padder = padding.PKCS7(64).padder()
 padded_data = padder.update(plaintext.encode('utf-8')) + padder.finalize()
 ciphertext = encryptor.update(padded_data) + encryptor.finalize()
-
 print("密文:", ciphertext.hex())
 print("密钥:", key.hex())
 
+# 创建一个解密对象（使用相同的密钥）
+cipher_dec = Cipher(algorithms.Blowfish(key), modes.ECB(), backend=default_backend())
+decryptor = cipher_dec.decryptor()
+
 # 解密数据
-decryptor = cipher.decryptor()
 decrypted_padded = decryptor.update(ciphertext) + decryptor.finalize()
 unpadder = padding.PKCS7(64).unpadder()
 decrypted = unpadder.update(decrypted_padded) + unpadder.finalize()
