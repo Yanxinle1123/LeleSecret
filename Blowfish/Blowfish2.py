@@ -1,8 +1,12 @@
 import os
+import warnings
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.utils import CryptographyDeprecationWarning
+
+warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
 
 while True:
     key = os.urandom(32)
@@ -29,8 +33,11 @@ while True:
     if key == 'q':
         print("已退出")
         break
-    decryptor = cipher.decryptor()
-    decrypted_padded = decryptor.update(ciphertext.encode('utf-8')) + decryptor.finalize()
+
+    cipher_dec = Cipher(algorithms.Blowfish(bytes.fromhex(key)), modes.ECB(), backend=default_backend())
+    decryptor = cipher_dec.decryptor()
+
+    decrypted_padded = decryptor.update(bytes.fromhex(ciphertext)) + decryptor.finalize()
     unpadder = padding.PKCS7(64).unpadder()
     decrypted = unpadder.update(decrypted_padded) + unpadder.finalize()
 
