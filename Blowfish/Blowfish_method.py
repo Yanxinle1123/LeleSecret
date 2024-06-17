@@ -32,6 +32,8 @@ class BlowfishDecryptionMethod:
         self._key = key
 
     def decryption(self):
+        warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
+
         cipher_dec = Cipher(algorithms.Blowfish(bytes.fromhex(self._key)), modes.ECB(), backend=default_backend())
         decryptor = cipher_dec.decryptor()
 
