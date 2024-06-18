@@ -422,6 +422,7 @@ def settings():
 
         fade_in(settings_window)
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
+        settings_window.bind('<Command-comma>', lambda event: settings())
     else:
         center_window(settings_window)
         settings_window.lift()
@@ -439,7 +440,8 @@ def instructions():
                              " 程序会弹出错误提示, 如果没有看见弹窗, 可能是被设置或者其他窗口挡住了)\n\n\n设置说明: 在设置中, 你可以"
                              "选择加密和解密的算法, 默认为自动。如果您想要恢复默认设置, 请点击重置按钮。如果您想要保存您的更改, 请点击"
                              "保存按钮。如果您想要退出设置, 请点击退出按钮。(注: 在点击退出按钮之前, 请保存您的更改, 因为直接点击退出"
-                             "按钮, 程序是不会保存您的更改的)\n\n\n注意事项: 请不要全屏显示窗口, 全屏模式下, 显示会有一些问题")
+                             "按钮, 程序是不会保存您的更改的)\n\n\n关于设置: 点击加密解密窗口下方的设置按钮, 程序就会弹出设置窗口。在"
+                             "设置里, 您可以选择加密解密的算法。\n\n\n注意事项: 请不要全屏显示窗口, 全屏模式下, 显示会有一些问题")
 
         EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
                        minimum_value_x=230, minimum_value_y=170)
@@ -450,6 +452,7 @@ def instructions():
         fade_in(instructions_window)
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
+        instructions_window.bind('<F1>', lambda event: instructions())
     else:
         center_window(instructions_window)
         instructions_window.lift()
@@ -511,4 +514,6 @@ EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEF
 fade_in(window)
 
 window.protocol("WM_DELETE_WINDOW", quit_window)
+window.bind('<Command-comma>', lambda event: settings())
+window.bind('<F1>', lambda event: instructions())
 window.mainloop()
