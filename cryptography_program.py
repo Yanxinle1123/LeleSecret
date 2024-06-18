@@ -19,6 +19,7 @@ from AES.AES_method import AESEncryptionMethod, AESDecryptionMethod
 from Blowfish.Blowfish_method import BlowfishEncryptionMethod, BlowfishDecryptionMethod
 from CAST5.CAST5_method import CAST5EncryptionMethod, CAST5DecryptionMethod
 from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
+from RC4.RC4_method import RC4EncryptionMethod, RC4DecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
@@ -176,6 +177,19 @@ def CAST5_encryption():
     replace(encryption_text_after, cipher_text)
 
 
+def RC4_encryption():
+    encryption_need = encryption_text_need.get_content()
+    if encryption_need == '':
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n请输入需要加密的文本").show_warning()
+        return
+    REM = RC4EncryptionMethod(encryption_text_need.get_content())
+    cipher_text, key = REM.encryption()
+    key = f'8{key}'
+    replace(key_text, key)
+    replace(encryption_text_after, cipher_text)
+
+
 def auto_encryption():
     encryption_need = encryption_text_need.get_content()
     if len(encryption_need.encode('utf-8')) <= 50:
@@ -275,6 +289,22 @@ def CAST5_decryption(decryption_text, key):
         EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
 
 
+def RC4_decryption(decryption_text, key):
+    try:
+        RDM = RC4DecryptionMethod(decryption_text, key)
+        plain_text = RDM.decryption()
+        replace(decryption_text_after, plain_text)
+    except UnicodeDecodeError:
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+    except ValueError:
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+    except Exception:
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
+
+
 def encryption():
     global algorithm_settings
 
@@ -299,6 +329,8 @@ def encryption():
             algorithm_settings = 6
         elif algorithm_settings == 'CAST5':
             algorithm_settings = 7
+        elif algorithm_settings == 'RC4':
+            algorithm_settings = 8
         if algorithm_settings == 1:
             auto_encryption()
         elif algorithm_settings == 2:
@@ -313,6 +345,8 @@ def encryption():
             Blowfish_encryption()
         elif algorithm_settings == 7:
             CAST5_encryption()
+        elif algorithm_settings == 8:
+            RC4_encryption()
 
 
 def decryption():
@@ -340,6 +374,8 @@ def decryption():
                 Blowfish_decryption(decryption_text, key)
             elif algorithm_choice == '7':
                 CAST5_decryption(decryption_text, key)
+            elif algorithm_choice == '8':
+                RC4_decryption(decryption_text, key)
             else:
                 window.bell()
                 EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
@@ -398,6 +434,8 @@ def settings():
             algorithm_settings = 6
         elif algorithm_settings == 'CAST5':
             algorithm_settings = 7
+        elif algorithm_settings == 'RC4':
+            algorithm_settings = 8
 
         settings_window = tk.Tk()
 
@@ -408,7 +446,7 @@ def settings():
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA', 'AEAD', 'Blowfish', 'CAST5'],
+        algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA', 'AEAD', 'Blowfish', 'CAST5', 'RC4'],
                                  default=algorithm_settings, side=tk.LEFT)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
