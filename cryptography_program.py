@@ -423,6 +423,8 @@ def settings():
         fade_in(settings_window)
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
         settings_window.bind('<Command-comma>', lambda event: settings())
+        settings_window.bind('<F1>', lambda event: instructions())
+        settings_window.bind('<q>', lambda event: quit_window())
     else:
         center_window(settings_window)
         settings_window.lift()
@@ -453,6 +455,8 @@ def instructions():
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
         instructions_window.bind('<F1>', lambda event: instructions())
+        instructions_window.bind('<Command-comma>', lambda event: settings())
+        instructions_window.bind('<q>', lambda event: quit_window())
     else:
         center_window(instructions_window)
         instructions_window.lift()
@@ -516,4 +520,5 @@ fade_in(window)
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.bind('<Command-comma>', lambda event: settings())
 window.bind('<F1>', lambda event: instructions())
+window.bind('<q>', lambda event: quit_window())
 window.mainloop()
