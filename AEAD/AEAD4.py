@@ -34,9 +34,9 @@ def decryption():
         plain_text = AEADDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
-        EasyWarningWindows("警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
     except IndexError:
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥错误").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥错误").show_warning()
 
 
 window = tk.Tk()

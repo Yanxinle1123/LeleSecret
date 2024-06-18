@@ -38,15 +38,15 @@ def decryption():
         plain_text = decrypt_obj.decryption()
         set_txt_obj_text_value(decryption_text_after, plain_text)
     except TypeError:
-        EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
     except binascii.Error:
-        EasyWarningWindows("警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
     except InvalidTag:
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥不正确").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥不正确").show_warning()
     except ValueError:
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
     except Exception as e:
-        EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
+        EasyWarningWindows(window, "警告", f"未知错误\n\n{str(e)}").show_warning()
 
 
 window = tk.Tk()

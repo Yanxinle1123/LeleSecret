@@ -35,9 +35,9 @@ def decryption():
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
-        EasyWarningWindows("警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
     except InvalidToken:
-        EasyWarningWindows("警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
+        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
 
 
 window = tk.Tk()
