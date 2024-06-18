@@ -192,10 +192,18 @@ def RC4_encryption():
 
 def auto_encryption():
     encryption_need = encryption_text_need.get_content()
-    if len(encryption_need.encode('utf-8')) <= 50:
+    if len(encryption_text_need.get_content()) < 32:
+        AES_encryption()
+    elif 32 <= len(encryption_need) < 64:
+        Fernet_encryption()
+    elif 64 <= len(encryption_need) < 128:
         RSA_encryption()
+    elif 128 <= len(encryption_need) < 256:
+        Blowfish_encryption()
+    elif 256 <= len(encryption_need) < 512:
+        CAST5_encryption()
     else:
-        AEAD_encryption()
+        RC4_encryption()
 
 
 def AES_decryption(decryption_text, key):
