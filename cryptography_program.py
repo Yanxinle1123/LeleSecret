@@ -454,7 +454,7 @@ def settings():
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['自动', 'AES', 'Fernet', 'RSA', 'AEAD', 'Blowfish', 'CAST5', 'RC4'],
+        algorithm = EasyDropList(f1, options=['自动', 'AEAD', 'AES', 'Fernet', 'RSA', 'Blowfish', 'CAST5', 'RC4'],
                                  default=algorithm_settings, side=tk.LEFT)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
