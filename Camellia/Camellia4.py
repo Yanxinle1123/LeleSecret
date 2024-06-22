@@ -7,7 +7,7 @@ from LeleEasyTkinter.easy_label import EasyLabel
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 
-from CAST5.CAST5_method import CAST5EncryptionMethod, CAST5DecryptionMethod
+from Camellia.Camellia_method import CamelliaEncryptionMethod, CamelliaDecryptionMethod
 
 
 def quit_window():
@@ -22,7 +22,7 @@ def replace(text_box, text):
 
 
 def encryption():
-    CEM = CAST5EncryptionMethod(encryption_text_need.get_content())
+    CEM = CamelliaEncryptionMethod(encryption_text_need.get_content())
     cipher_text, key = CEM.encryption()
     replace(key_text, key)
     replace(encryption_text_after, cipher_text)
@@ -30,13 +30,17 @@ def encryption():
 
 def decryption():
     try:
-        CDM = CAST5DecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
+        CDM = CamelliaDecryptionMethod(decryption_text_need.get_content(), key_text_need.get_content())
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
+    except UnicodeDecodeError:
+        EasyWarningWindows(window, "警告",
+                           "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+        EasyWarningWindows(window, "警告",
+                           "错误\n\n无效的密文或密钥, 请确保输入正确的十六进制字符串").show_warning()
     except Exception:
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
+        EasyWarningWindows(window, "警告", "解密失败\n")
 
 
 window = tk.Tk()
