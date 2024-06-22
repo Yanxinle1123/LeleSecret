@@ -214,19 +214,19 @@ def Camellia_encryption():
 
 
 def auto_encryption():
-    encryption_need = encryption_text_need.get_content()
-    if len(encryption_text_need.get_content()) < 32:
+    encryption_need_length = len(encryption_text_need.get_content().encode('utf-8'))
+    if encryption_need_length <= 16:
         AES_encryption()
-    elif 32 <= len(encryption_need) < 64:
+    elif encryption_need_length <= 32:
+        Camellia_encryption()
+    elif encryption_need_length <= 64:
         Fernet_encryption()
-    elif 64 <= len(encryption_need) < 128:
+    elif encryption_need_length <= 128:
         RSA_encryption()
-    elif 128 <= len(encryption_need) < 256:
+    elif encryption_need_length <= 256:
         Blowfish_encryption()
-    elif 256 <= len(encryption_need) < 512:
-        CAST5_encryption()
     else:
-        RC4_encryption()
+        CAST5_encryption()
 
 
 def AES_decryption(decryption_text, key):
