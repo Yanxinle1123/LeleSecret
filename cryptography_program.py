@@ -360,7 +360,7 @@ def encryption():
     result = True
     if len(encryption_text_need.get_content().encode('utf-8')) >= 10000:
         result = EasyWarningWindows(window, "是/否",
-                                    "您需要加密的字数已经超过了10000个字节, 继续加密很可能导致程序卡死或无法退出, 是否继续加密？").show_warning()
+                                    "您需要加密的字数已经超过了10000个字符, 继续加密很可能导致程序卡死或无法退出, 是否继续加密？").show_warning()
     if result:
         with open(cryptography_settings, 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
