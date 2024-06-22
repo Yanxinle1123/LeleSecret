@@ -24,16 +24,17 @@ from RC4.RC4_method import RC4EncryptionMethod, RC4DecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
-def check_and_create_file(filename):
+def check_and_create_file(filename, write):
     home_dir = os.path.expanduser('~')
     file_path = os.path.join(home_dir, filename)
 
     if not os.path.exists(file_path):
         with open(file_path, 'w') as file:
-            file.write("自动")
+            file.write(write)
 
 
-check_and_create_file("algorithm_settings.txt")
+check_and_create_file("algorithm_settings.txt", "自动")
+check_and_create_file("instructions_settings.txt", "开")
 
 
 def resource_path(relative_path):
@@ -45,6 +46,7 @@ def resource_path(relative_path):
 
 
 cryptography_settings = resource_path('algorithm_settings.txt')
+instructions_settings = resource_path('instructions_settings.txt')
 
 
 def quit_window():
@@ -77,6 +79,13 @@ def on_settings_window_close2():
 def on_instructions_window_close():
     global instructions_window, instructions_num
 
+    result = EasyWarningWindows(instructions_window, "是/否", "下次打开程序时是否需要自动打开此窗口？").show_warning()
+    if result:
+        with open(instructions_settings, 'w') as file:
+            file.write("开")
+    else:
+        with open(instructions_settings, 'w') as file:
+            file.write("关")
     fade_out(instructions_window)
     instructions_num -= 1
 
@@ -431,7 +440,6 @@ def save_settings():
 
     with open(cryptography_settings, 'w', encoding='utf-8') as file:
         file.write(algorithm.get_combo_value())
-    print(f'已将{algorithm.get_combo_value()}写入到文件{cryptography_settings}')
 
 
 def reset_settings():
@@ -464,7 +472,6 @@ def settings():
 
         with open(cryptography_settings, 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
-        print(f'已从文件{cryptography_settings}里读取到{algorithm_settings}')
         if algorithm_settings == '自动':
             algorithm_settings = 1
         elif algorithm_settings == 'AEAD':
@@ -483,7 +490,6 @@ def settings():
             algorithm_settings = 8
         elif algorithm_settings == 'RC4':
             algorithm_settings = 9
-        print(f'algorithm_settings为: {algorithm_settings}')
         settings_window = tk.Tk()
 
         EasyAutoWindow(settings_window, window_title="设置", window_width_value=600, window_height_value=150,
@@ -604,8 +610,14 @@ EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEF
 
 fade_in(window)
 
+with open(instructions_settings, 'r', encoding='utf-8') as file:
+    auto_open_instructions_window = file.read()
+if auto_open_instructions_window == "开":
+    instructions()
+
 window.protocol("WM_DELETE_WINDOW", quit_window)
 window.bind('<Command-comma>', lambda event: settings())
 window.bind('<F1>', lambda event: instructions())
 window.bind('<q>', lambda event: quit_window())
+
 window.mainloop()
