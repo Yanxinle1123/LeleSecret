@@ -342,12 +342,15 @@ def Camellia_decryption(decryption_text, key):
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
+        window.bell()
         EasyWarningWindows(window, "警告",
                            "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
+        window.bell()
         EasyWarningWindows(window, "警告",
                            "错误\n\n无效的密文或密钥, 请确保输入正确的十六进制字符串").show_warning()
     except Exception:
+        window.bell()
         EasyWarningWindows(window, "警告", "解密失败\n")
 
 
