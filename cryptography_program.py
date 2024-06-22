@@ -409,7 +409,7 @@ def decryption():
         result = True
         if len(decryption_text) >= 10000:
             result = EasyWarningWindows(window, "是/否",
-                                        "您需要解密的字数已经超过了10000个字节, 继续解密很可能导致程序卡死或无法退出, 是否继续解密？").show_warning()
+                                        "您需要解密的字数已经超过了10000个字符, 继续解密很可能导致程序卡死或无法退出, 是否继续解密？").show_warning()
         if result:
             if decryption_text == '':
                 window.bell()
