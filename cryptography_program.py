@@ -24,8 +24,8 @@ from RC4.RC4_method import RC4EncryptionMethod, RC4DecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
 
 
-def check_and_create_file(filename, write):
-    home_dir = os.path.expanduser('~')
+def check_and_create_file(filename, home_dir, write):
+    home_dir = os.path.expanduser(home_dir)
     file_path = os.path.join(home_dir, filename)
 
     if not os.path.exists(file_path):
@@ -33,8 +33,8 @@ def check_and_create_file(filename, write):
             file.write(write)
 
 
-check_and_create_file("algorithm_settings.txt", "自动")
-check_and_create_file("instructions_settings.txt", "开")
+check_and_create_file("algorithm_settings.txt", "~", "自动")
+check_and_create_file("instructions_settings.txt", "~", "开")
 
 
 def resource_path(relative_path):
