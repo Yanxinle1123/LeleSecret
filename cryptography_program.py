@@ -18,6 +18,7 @@ from AEAD.AEAD_method import AEADEncryptionMethod, AEADDecryptionMethod
 from AES.AES_method import AESEncryptionMethod, AESDecryptionMethod
 from Blowfish.Blowfish_method import BlowfishEncryptionMethod, BlowfishDecryptionMethod
 from CAST5.CAST5_method import CAST5EncryptionMethod, CAST5DecryptionMethod
+from Camellia.Camellia_method import CamelliaEncryptionMethod, CamelliaDecryptionMethod
 from Fernet.Fernet_method import FernetEncryptionMethod, FernetDecryptionMethod
 from RC4.RC4_method import RC4EncryptionMethod, RC4DecryptionMethod
 from RSA.RSA_method import RSADecryptionMethod, RSAEncryptionMethod
@@ -190,6 +191,19 @@ def RC4_encryption():
     replace(encryption_text_after, cipher_text)
 
 
+def Camellia_encryption():
+    encryption_need = encryption_text_need.get_content()
+    if encryption_need == '':
+        window.bell()
+        EasyWarningWindows(window, "警告", "错误\n\n请输入需要加密的文本").show_warning()
+        return
+    CEM = CamelliaEncryptionMethod(encryption_need)
+    cipher_text, key = CEM.encryption()
+    key = f'9{key}'
+    replace(key_text, key)
+    replace(encryption_text_after, cipher_text)
+
+
 def auto_encryption():
     encryption_need = encryption_text_need.get_content()
     if len(encryption_text_need.get_content()) < 32:
@@ -313,6 +327,21 @@ def RC4_decryption(decryption_text, key):
         EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
 
 
+def Camellia_decryption(decryption_text, key):
+    try:
+        CDM = CamelliaDecryptionMethod(decryption_text, key)
+        plain_text = CDM.decryption()
+        replace(decryption_text_after, plain_text)
+    except UnicodeDecodeError:
+        EasyWarningWindows(window, "警告",
+                           "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
+    except ValueError:
+        EasyWarningWindows(window, "警告",
+                           "错误\n\n无效的密文或密钥, 请确保输入正确的十六进制字符串").show_warning()
+    except Exception:
+        EasyWarningWindows(window, "警告", "解密失败\n")
+
+
 def encryption():
     global algorithm_settings
 
@@ -325,35 +354,39 @@ def encryption():
             algorithm_settings = file.read()
         if algorithm_settings == '自动':
             algorithm_settings = 1
-        elif algorithm_settings == 'AES':
-            algorithm_settings = 2
-        elif algorithm_settings == 'Fernet':
-            algorithm_settings = 3
-        elif algorithm_settings == 'RSA':
-            algorithm_settings = 4
         elif algorithm_settings == 'AEAD':
+            algorithm_settings = 2
+        elif algorithm_settings == 'AES':
+            algorithm_settings = 3
+        elif algorithm_settings == 'Camellia':
+            algorithm_settings = 4
+        elif algorithm_settings == 'Fernet':
             algorithm_settings = 5
-        elif algorithm_settings == 'Blowfish':
+        elif algorithm_settings == 'RSA':
             algorithm_settings = 6
-        elif algorithm_settings == 'CAST5':
+        elif algorithm_settings == 'Blowfish':
             algorithm_settings = 7
-        elif algorithm_settings == 'RC4':
+        elif algorithm_settings == 'CAST5':
             algorithm_settings = 8
+        elif algorithm_settings == 'RC4':
+            algorithm_settings = 9
         if algorithm_settings == 1:
             auto_encryption()
         elif algorithm_settings == 2:
-            AES_encryption()
-        elif algorithm_settings == 3:
-            Fernet_encryption()
-        elif algorithm_settings == 4:
-            RSA_encryption()
-        elif algorithm_settings == 5:
             AEAD_encryption()
+        elif algorithm_settings == 3:
+            AES_encryption()
+        elif algorithm_settings == 4:
+            Camellia_encryption()
+        elif algorithm_settings == 5:
+            Fernet_encryption()
         elif algorithm_settings == 6:
-            Blowfish_encryption()
+            RSA_encryption()
         elif algorithm_settings == 7:
-            CAST5_encryption()
+            Blowfish_encryption()
         elif algorithm_settings == 8:
+            CAST5_encryption()
+        elif algorithm_settings == 9:
             RC4_encryption()
 
 
@@ -384,6 +417,8 @@ def decryption():
                 CAST5_decryption(decryption_text, key)
             elif algorithm_choice == '8':
                 RC4_decryption(decryption_text, key)
+            elif algorithm_choice == '9':
+                Camellia_decryption(decryption_text, key)
             else:
                 window.bell()
                 EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
@@ -396,6 +431,7 @@ def save_settings():
 
     with open(cryptography_settings, 'w', encoding='utf-8') as file:
         file.write(algorithm.get_combo_value())
+    print(f'已将{algorithm.get_combo_value()}写入到文件{cryptography_settings}')
 
 
 def reset_settings():
@@ -428,23 +464,26 @@ def settings():
 
         with open(cryptography_settings, 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
+        print(f'已从文件{cryptography_settings}里读取到{algorithm_settings}')
         if algorithm_settings == '自动':
             algorithm_settings = 1
-        elif algorithm_settings == 'AES':
-            algorithm_settings = 2
-        elif algorithm_settings == 'Fernet':
-            algorithm_settings = 3
-        elif algorithm_settings == 'RSA':
-            algorithm_settings = 4
         elif algorithm_settings == 'AEAD':
+            algorithm_settings = 2
+        elif algorithm_settings == 'AES':
+            algorithm_settings = 3
+        elif algorithm_settings == 'Camellia':
+            algorithm_settings = 4
+        elif algorithm_settings == 'Fernet':
             algorithm_settings = 5
-        elif algorithm_settings == 'Blowfish':
+        elif algorithm_settings == 'RSA':
             algorithm_settings = 6
-        elif algorithm_settings == 'CAST5':
+        elif algorithm_settings == 'Blowfish':
             algorithm_settings = 7
-        elif algorithm_settings == 'RC4':
+        elif algorithm_settings == 'CAST5':
             algorithm_settings = 8
-
+        elif algorithm_settings == 'RC4':
+            algorithm_settings = 9
+        print(f'algorithm_settings为: {algorithm_settings}')
         settings_window = tk.Tk()
 
         EasyAutoWindow(settings_window, window_title="设置", window_width_value=600, window_height_value=150,
@@ -454,8 +493,8 @@ def settings():
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 
         EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['自动', 'AEAD', 'AES', 'Fernet', 'RSA', 'Blowfish', 'CAST5', 'RC4'],
-                                 default=algorithm_settings, side=tk.LEFT)
+        algorithm = EasyDropList(f1, options=['自动', 'AEAD', 'AES', 'Camellia', 'Fernet', 'RSA', 'Blowfish', 'CAST5',
+                                              'RC4'], default=algorithm_settings, side=tk.LEFT)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
                    fill=tk.X)
@@ -489,7 +528,9 @@ def instructions():
                              "选择加密和解密的算法, 默认为自动。如果您想要恢复默认设置, 请点击重置按钮。如果您想要保存您的更改, 请点击"
                              "保存按钮。如果您想要退出设置, 请点击退出按钮。(注: 在点击退出按钮之前, 请保存您的更改, 因为直接点击退出"
                              "按钮, 程序是不会保存您的更改的)\n\n\n关于设置: 点击加密解密窗口下方的设置按钮, 程序就会弹出设置窗口。在"
-                             "设置里, 您可以选择加密解密的算法。\n\n\n注意事项: 请不要全屏显示窗口, 全屏模式下, 显示会有一些问题")
+                             "设置里, 您可以选择加密解密的算法。\n\n\n注意事项: 请不要全屏显示窗口, 全屏模式下, 显示会有一些问题。\n"
+                             "\n\n快捷键: 您可以通过按q键来关闭程序, 您也可以通过按command键加逗号来打开设置窗口, 您还可以按F1键来打"
+                             "开使用方法窗口。")
 
         EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
                        minimum_value_x=230, minimum_value_y=170)
