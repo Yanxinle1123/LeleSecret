@@ -36,6 +36,10 @@ def check_and_create_file(filename, home_dir, write):
 
 check_and_create_file("algorithm_settings.txt", "~", "自动")
 check_and_create_file("instructions_settings.txt", "~", "开")
+check_and_create_file("unsaved_reminder_settings.txt", "~", "开")
+check_and_create_file("error_prompt_settings.txt", "~", "开")
+check_and_create_file("auto_save_settings.txt", "~", "开")
+check_and_create_file("enable_shortcut_keys.txt", "~", "开")
 
 
 def resource_path(relative_path):
@@ -48,6 +52,10 @@ def resource_path(relative_path):
 
 cryptography_settings = resource_path('algorithm_settings.txt')
 instructions_settings = resource_path('instructions_settings.txt')
+unsaved_reminder_settings = resource_path('unsaved_reminder_settings.txt')
+error_prompt_settings = resource_path('error_prompt_settings.txt')
+auto_save_settings = resource_path('auto_save_settings.txt')
+enable_shortcut_keys = resource_path('enable_shortcut_keys.txt')
 
 
 def quit_window():
@@ -447,11 +455,29 @@ def save_settings():
 
 
 def reset_settings():
-    global algorithm
+    global algorithm, other_settings
 
-    result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
-    if result:
-        algorithm.set_combo_value('自动')
+    # result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
+    # if result:
+    algorithm.set_combo_value('自动')
+    on_button_click(["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "重置设置后自动保存", "启用快捷键"])
+    save_settings()
+
+
+def get_set():
+    check_button_set = other_settings.get_set()
+    if not check_button_set:
+        check_button_set = "无选项"
+    return check_button_set
+
+
+def on_button_click(options):
+    global other_settings
+
+    for var in other_settings.get_vars().values():
+        var.set(0)
+    for option in options:
+        other_settings.get_vars()[option].set(1)
 
 
 def center_window(root):
@@ -469,7 +495,7 @@ def center_window(root):
 
 
 def settings():
-    global settings_window, settings_num, algorithm, algorithm_settings
+    global settings_window, settings_num, algorithm, algorithm_settings, other_settings
 
     if settings_num != 1:
         settings_num += 1
@@ -494,6 +520,7 @@ def settings():
             algorithm_settings = 8
         elif algorithm_settings == 'RC4':
             algorithm_settings = 9
+
         settings_window = tk.Tk()
 
         EasyAutoWindow(settings_window, window_title="设置", window_width_value=780, window_height_value=340,
@@ -508,8 +535,10 @@ def settings():
         algorithm = EasyDropList(f11, options=['自动', 'AEAD', 'AES', 'Camellia', 'Fernet', 'RSA', 'Blowfish', 'CAST5',
                                                'RC4'], default=algorithm_settings, side=tk.LEFT)
 
-        other_settings = EasyCheckButton(f12, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "启用快捷键"],
-                                         set_=["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "启用快捷键"],
+        other_settings = EasyCheckButton(f12, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
+                                                    "重置设置后自动保存", "启用快捷键"],
+                                         set_=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
+                                               "重置设置后自动保存", "启用快捷键"],
                                          expand=True, fill=tk.Y)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
@@ -569,6 +598,7 @@ settings_window = None
 algorithm = None
 algorithm_settings = None
 instructions_window = None
+other_settings = None
 instructions_num = 0
 settings_num = 0
 
