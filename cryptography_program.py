@@ -5,6 +5,7 @@ import tkinter as tk
 
 from LeleEasyTkinter.easy_auto_window import EasyAutoWindow
 from LeleEasyTkinter.easy_button import EasyButton
+from LeleEasyTkinter.easy_check_button import EasyCheckButton
 from LeleEasyTkinter.easy_drop_list import EasyDropList
 from LeleEasyTkinter.easy_fade_animation import fade_in, fade_out
 from LeleEasyTkinter.easy_frame import EasyFrame
@@ -495,15 +496,21 @@ def settings():
             algorithm_settings = 9
         settings_window = tk.Tk()
 
-        EasyAutoWindow(settings_window, window_title="设置", window_width_value=600, window_height_value=150,
+        EasyAutoWindow(settings_window, window_title="设置", window_width_value=780, window_height_value=340,
                        adjust_x=False, adjust_y=False)
 
-        f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
-        f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
+        f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
+        f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
+        f12 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
+        f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
 
-        EasyLabel(f1, text="加密解密的算法:", side=tk.LEFT)
-        algorithm = EasyDropList(f1, options=['自动', 'AEAD', 'AES', 'Camellia', 'Fernet', 'RSA', 'Blowfish', 'CAST5',
-                                              'RC4'], default=algorithm_settings, side=tk.LEFT)
+        EasyLabel(f11, text="加密解密的算法:", side=tk.LEFT)
+        algorithm = EasyDropList(f11, options=['自动', 'AEAD', 'AES', 'Camellia', 'Fernet', 'RSA', 'Blowfish', 'CAST5',
+                                               'RC4'], default=algorithm_settings, side=tk.LEFT)
+
+        other_settings = EasyCheckButton(f12, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "启用快捷键"],
+                                         set_=["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "启用快捷键"],
+                                         expand=True, fill=tk.Y)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
                    fill=tk.X)
