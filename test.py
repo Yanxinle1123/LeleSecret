@@ -1,25 +1,22 @@
-import tkinter as tk
+import tkinter
+
+from LeleEasyTkinter.easy_check_button import EasyCheckButton
 
 
 def on_button_click():
-    # 取消选中所有选项
-    print(vars)
-    for var in vars.values():
-        var.set(0)
-    # 选中"选项2"
-    vars["选项2"].set(1)
+    fruit_check_button.set(["苹果(默认)", "橙子(默认)"])
 
 
-root = tk.Tk()
+root = tkinter.Tk()
 root.title("示例")
 
-options = ["选项1", "选项2", "选项3"]
-vars = {option: tk.IntVar() for option in options}
-check_buttons = [tk.Checkbutton(root, text=option, variable=vars[option]) for option in options]
-for check_button in check_buttons:
-    check_button.pack()
+fruit_check_button = EasyCheckButton(root,
+                                     text=["苹果(默认)", "香蕉(默认)", "橙子(默认)", "葡萄", "梨子(默认)", "榴莲",
+                                           "荔枝", "草莓", "柚子", "樱桃", "杏子", "菠萝", "西瓜"],
+                                     set_=["苹果(默认)", "梨子(默认)", "橙子(默认)", "香蕉(默认)"],
+                                     expand=tkinter.YES)
 
-button = tk.Button(root, text="改变选中值", command=on_button_click)
+button = tkinter.Button(root, text="改变选中值", command=on_button_click)
 button.pack()
 
 root.mainloop()

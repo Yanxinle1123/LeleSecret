@@ -55,7 +55,7 @@ instructions_settings = resource_path('instructions_settings.txt')
 unsaved_reminder_settings = resource_path('unsaved_reminder_settings.txt')
 error_prompt_settings = resource_path('error_prompt_settings.txt')
 auto_save_settings = resource_path('auto_save_settings.txt')
-enable_shortcut_keys = resource_path('enable_shortcut_keys.txt')
+shortcut_keys_settings = resource_path('enable_shortcut_keys.txt')
 
 
 def quit_window():
@@ -448,36 +448,40 @@ def decryption():
 
 
 def save_settings():
-    global algorithm
+    global algorithm, other_settings, unsaved_reminder_settings_value, error_prompt_settings_value, \
+        auto_save_settings_value, shortcut_keys_settings_value
 
     with open(cryptography_settings, 'w', encoding='utf-8') as file:
         file.write(algorithm.get_combo_value())
+
+    with open(unsaved_reminder_settings, 'w', encoding='utf-8') as fire:
+        fire.write(unsaved_reminder_settings_value)
+
+    with open(error_prompt_settings, 'w', encoding='utf-8') as fire:
+        fire.write(error_prompt_settings_value)
+
+    with open(auto_save_settings, 'w', encoding='utf-8') as fire:
+        fire.write(auto_save_settings_value)
+
+    with open(shortcut_keys_settings, 'w', encoding='utf-8') as fire:
+        fire.write(shortcut_keys_settings_value)
 
 
 def reset_settings():
     global algorithm, other_settings
 
-    # result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
-    # if result:
-    algorithm.set_combo_value('自动')
-    on_button_click(["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "重置设置后自动保存", "启用快捷键"])
-    save_settings()
+    result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
+    if result:
+        algorithm.set_combo_value('自动')
+        other_settings.set(["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "重置设置后自动保存", "启用快捷键"])
+        save_settings()
 
 
 def get_set():
     check_button_set = other_settings.get_set()
     if not check_button_set:
-        check_button_set = "无选项"
+        check_button_set = None
     return check_button_set
-
-
-def on_button_click(options):
-    global other_settings
-
-    for var in other_settings.get_vars().values():
-        var.set(0)
-    for option in options:
-        other_settings.get_vars()[option].set(1)
 
 
 def center_window(root):
@@ -495,7 +499,9 @@ def center_window(root):
 
 
 def settings():
-    global settings_window, settings_num, algorithm, algorithm_settings, other_settings
+    global settings_window, settings_num, algorithm, algorithm_settings, other_settings, \
+        unsaved_reminder_settings_value, error_prompt_settings_value, auto_save_settings_value, \
+        shortcut_keys_settings_value
 
     if settings_num != 1:
         settings_num += 1
@@ -521,6 +527,28 @@ def settings():
         elif algorithm_settings == 'RC4':
             algorithm_settings = 9
 
+        with open(unsaved_reminder_settings, 'r', encoding='utf-8') as fire:
+            unsaved_reminder_settings_value = fire.read()
+
+        with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+            error_prompt_settings_value = fire.read()
+
+        with open(auto_save_settings, 'r', encoding='utf-8') as fire:
+            auto_save_settings_value = fire.read()
+
+        with open(shortcut_keys_settings, 'r', encoding='utf-8') as fire:
+            shortcut_keys_settings_value = fire.read()
+
+        other_settings_set = []
+        if unsaved_reminder_settings_value == "开":
+            other_settings_set.append("退出设置未保存时提醒")
+        if error_prompt_settings_value == "开":
+            other_settings_set.append("加密解密出错时弹出错误提示")
+        if auto_save_settings_value == "开":
+            other_settings_set.append("重置设置后自动保存")
+        if shortcut_keys_settings_value == "开":
+            other_settings_set.append("启用快捷键")
+
         settings_window = tk.Tk()
 
         EasyAutoWindow(settings_window, window_title="设置", window_width_value=780, window_height_value=340,
@@ -537,9 +565,7 @@ def settings():
 
         other_settings = EasyCheckButton(f12, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
                                                     "重置设置后自动保存", "启用快捷键"],
-                                         set_=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
-                                               "重置设置后自动保存", "启用快捷键"],
-                                         expand=True, fill=tk.Y)
+                                         set_=other_settings_set, expand=True, fill=tk.Y)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
                    fill=tk.X)
@@ -570,7 +596,7 @@ def instructions():
                              "框内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然"
                              "后点击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注: 如果解密出错,"
                              " 程序会弹出错误提示, 如果没有看见弹窗, 可能是被设置或者其他窗口挡住了)\n\n\n设置说明: 在设置中, 你可以"
-                             "选择加密和解密的算法, 默认为自动。如果您想要恢复默认设置, 请点击重置按钮。如果您想要保存您的更改, 请点击"
+                             "设置加密和解密的算法和其他的功能。如果您想要恢复默认设置, 请点击重置按钮。如果您想要保存您的更改, 请点击"
                              "保存按钮。如果您想要退出设置, 请点击退出按钮。(注: 在点击退出按钮之前, 请保存您的更改, 因为直接点击退出"
                              "按钮, 程序是不会保存您的更改的)\n\n\n关于设置: 点击加密解密窗口下方的设置按钮, 程序就会弹出设置窗口。在"
                              "设置里, 您可以选择加密解密的算法。\n\n\n注意事项: 请不要全屏显示窗口, 全屏模式下, 显示会有一些问题。\n"
@@ -599,6 +625,10 @@ algorithm = None
 algorithm_settings = None
 instructions_window = None
 other_settings = None
+unsaved_reminder_settings_value = None
+error_prompt_settings_value = None
+auto_save_settings_value = None
+shortcut_keys_settings_value = None
 instructions_num = 0
 settings_num = 0
 
