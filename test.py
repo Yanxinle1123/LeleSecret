@@ -5,6 +5,7 @@ from LeleEasyTkinter.easy_check_button import EasyCheckButton
 
 def on_button_click():
     fruit_check_button.set(["苹果(默认)", "橙子(默认)"])
+    print(fruit_check_button.get_set())
 
 
 root = tkinter.Tk()

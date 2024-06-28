@@ -448,8 +448,11 @@ def decryption():
 
 
 def save_settings():
-    global algorithm, other_settings, unsaved_reminder_settings_value, error_prompt_settings_value, \
-        auto_save_settings_value, shortcut_keys_settings_value
+    global algorithm, other_settings
+
+    other_settings_set = other_settings.get_set()
+
+    print(other_settings_set)
 
     with open(cryptography_settings, 'w', encoding='utf-8') as file:
         file.write(algorithm.get_combo_value())
@@ -465,6 +468,9 @@ def save_settings():
 
     with open(shortcut_keys_settings, 'w', encoding='utf-8') as fire:
         fire.write(shortcut_keys_settings_value)
+
+    print(unsaved_reminder_settings_value, error_prompt_settings_value, auto_save_settings_value,
+          shortcut_keys_settings_value)
 
 
 def reset_settings():
@@ -490,11 +496,9 @@ def center_window(root):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
 
-    # 计算窗口应该在屏幕上的位置
     x = (screen_width - width) / 2
     y = (screen_height - height) / 2
 
-    # 设置窗口的位置
     root.geometry('%dx%d+%d+%d' % (width, height, x, y))
 
 
@@ -581,6 +585,7 @@ def settings():
         settings_window.bind('<Command-comma>', lambda event: settings())
         settings_window.bind('<F1>', lambda event: instructions())
         settings_window.bind('<q>', lambda event: quit_window())
+        print(f"{other_settings.get_set()}")
     else:
         center_window(settings_window)
         settings_window.lift()
