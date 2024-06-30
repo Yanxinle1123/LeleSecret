@@ -458,19 +458,28 @@ def save_settings():
         file.write(algorithm.get_combo_value())
 
     with open(unsaved_reminder_settings, 'w', encoding='utf-8') as fire:
-        fire.write(unsaved_reminder_settings_value)
+        if "退出设置未保存时提醒" in other_settings_set:
+            fire.write("开")
+        else:
+            fire.write("关")
 
     with open(error_prompt_settings, 'w', encoding='utf-8') as fire:
-        fire.write(error_prompt_settings_value)
+        if "加密解密出错时弹出错误提示" in other_settings_set:
+            fire.write("开")
+        else:
+            fire.write("关")
 
     with open(auto_save_settings, 'w', encoding='utf-8') as fire:
-        fire.write(auto_save_settings_value)
+        if "重置设置后自动保存" in other_settings_set:
+            fire.write("开")
+        else:
+            fire.write("关")
 
     with open(shortcut_keys_settings, 'w', encoding='utf-8') as fire:
-        fire.write(shortcut_keys_settings_value)
-
-    print(unsaved_reminder_settings_value, error_prompt_settings_value, auto_save_settings_value,
-          shortcut_keys_settings_value)
+        if "启用快捷键" in other_settings_set:
+            fire.write("开")
+        else:
+            fire.write("关")
 
 
 def reset_settings():
