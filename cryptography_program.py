@@ -452,10 +452,10 @@ def save_settings():
 
     other_settings_set = other_settings.get_set()
 
-    print(other_settings_set)
+    print(f"in save_settings(),other_settings_set={other_settings_set}")
 
-    with open(cryptography_settings, 'w', encoding='utf-8') as file:
-        file.write(algorithm.get_combo_value())
+    with open(cryptography_settings, 'w', encoding='utf-8') as file_local:
+        file_local.write(algorithm.get_combo_value())
 
     with open(unsaved_reminder_settings, 'w', encoding='utf-8') as fire:
         if "退出设置未保存时提醒" in other_settings_set:
@@ -514,7 +514,7 @@ def center_window(root):
 def settings():
     global settings_window, settings_num, algorithm, algorithm_settings, other_settings, \
         unsaved_reminder_settings_value, error_prompt_settings_value, auto_save_settings_value, \
-        shortcut_keys_settings_value
+        shortcut_keys_settings_value, window
 
     if settings_num != 1:
         settings_num += 1
@@ -562,7 +562,7 @@ def settings():
         if shortcut_keys_settings_value == "开":
             other_settings_set.append("启用快捷键")
 
-        settings_window = tk.Tk()
+        settings_window = tk.Toplevel(window)
 
         EasyAutoWindow(settings_window, window_title="设置", window_width_value=780, window_height_value=340,
                        adjust_x=False, adjust_y=False)
@@ -578,8 +578,9 @@ def settings():
 
         other_settings = EasyCheckButton(f12, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
                                                     "重置设置后自动保存", "启用快捷键"],
-                                         set_=other_settings_set, expand=True, fill=tk.Y)
+                                         set_text_list=other_settings_set, master_win=window, expand=True, fill=tk.Y)
 
+        # print(f"other_settings_selected={other_settings.get_set()}")
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
                    fill=tk.X)
 
@@ -594,7 +595,7 @@ def settings():
         settings_window.bind('<Command-comma>', lambda event: settings())
         settings_window.bind('<F1>', lambda event: instructions())
         settings_window.bind('<q>', lambda event: quit_window())
-        print(f"{other_settings.get_set()}")
+
     else:
         center_window(settings_window)
         settings_window.lift()
