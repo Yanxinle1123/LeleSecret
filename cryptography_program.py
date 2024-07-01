@@ -452,8 +452,6 @@ def save_settings():
 
     other_settings_set = other_settings.get_set()
 
-    print(f"in save_settings(),other_settings_set={other_settings_set}")
-
     with open(cryptography_settings, 'w', encoding='utf-8') as file_local:
         file_local.write(algorithm.get_combo_value())
 
@@ -580,7 +578,6 @@ def settings():
                                                     "重置设置后自动保存", "启用快捷键"],
                                          set_text_list=other_settings_set, master_win=window, expand=True, fill=tk.Y)
 
-        # print(f"other_settings_selected={other_settings.get_set()}")
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
                    fill=tk.X)
 
