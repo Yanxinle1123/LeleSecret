@@ -76,11 +76,36 @@ def on_settings_window_close():
 
 
 def on_settings_window_close2():
-    global settings_window, settings_num
+    global settings_window, settings_num, unsaved_reminder_settings_value, error_prompt_settings_value, \
+        auto_save_settings_value, shortcut_keys_settings_value, other_settings
 
-    result = EasyWarningWindows(settings_window, "是/否", "是否保存更改？").show_warning()
-    if result:
-        save_settings()
+    file_list = []
+    obtain_list = other_settings.get_set()
+
+    with open(unsaved_reminder_settings, 'r', encoding='utf-8') as fire:
+        unsaved_reminder_settings_value = fire.read()
+    if unsaved_reminder_settings_value == "开":
+        file_list.append("退出设置未保存时提醒")
+
+    with open(error_prompt_settings, 'r', encoding='utf-8'):
+        error_prompt_settings_value = fire.read()
+    if error_prompt_settings_value == "开":
+        file_list.append("加密解密出错时弹出错误提示")
+
+    with open(auto_save_settings, 'r', encoding='utf-8'):
+        auto_save_settings_value = fire.read()
+    if auto_save_settings_value == "开":
+        file_list.append("重置设置后自动保存")
+
+    with open(shortcut_keys_settings, 'r', encoding='utf-8'):
+        shortcut_keys_settings_value = fire.read()
+    if shortcut_keys_settings_value == "开":
+        file_list.append("启用快捷键")
+
+    if unsaved_reminder_settings_value == "开" and obtain_list != file_list:
+        result = EasyWarningWindows(settings_window, "是/否", "是否保存更改？").show_warning()
+        if result:
+            save_settings()
     fade_out(settings_window)
     settings_num -= 1
 
