@@ -574,13 +574,17 @@ def save_settings():
 
 
 def reset_settings():
-    global algorithm, other_settings
+    global algorithm, other_settings, auto_save_settings_value
+
+    with open(auto_save_settings, 'r', encoding='utf-8') as file:
+        auto_save_settings_value = file.read()
 
     result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
     if result:
         algorithm.set_combo_value('自动')
         other_settings.set(["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "重置设置后自动保存", "启用快捷键"])
-        save_settings()
+        if auto_save_settings_value == "开":
+            save_settings()
 
 
 def get_set():
