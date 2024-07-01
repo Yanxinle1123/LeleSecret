@@ -107,6 +107,11 @@ def replace(text_box, text):
 
 
 def get_data():
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         decryption_text = decryption_text_need.get_content()
         key_and_algorithm = key_text_need.get_content()
@@ -115,7 +120,8 @@ def get_data():
         return decryption_text, algorithm_choice, key
     except IndexError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n密文或密钥不正确").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n密文或密钥不正确").show_warning()
 
 
 def AES_encryption():
@@ -239,128 +245,190 @@ def auto_encryption():
 
 
 def AES_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         decrypt_obj = AESDecryptionMethod(decryption_text, key)
         plain_text = decrypt_obj.decryption()
         replace(decryption_text_after, plain_text)
     except TypeError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入正确的Base64编码密钥").show_warning()
     except binascii.Error:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n密钥长度不正确, 请输入正确的Base64编码密钥").show_warning()
     except InvalidTag:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥不正确").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥不正确").show_warning()
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密文长度不正确").show_warning()
     except Exception as e:
         window.bell()
-        EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows("警告", f"未知错误\n\n{str(e)}").show_warning()
 
 
 def Fernet_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         CDM = FernetDecryptionMethod(decryption_text, key)
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n无效的密钥, 请输入32个URL安全的base64编码字节").show_warning()
     except InvalidToken:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文无效").show_warning()
 
 
 def RSA_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         RDM = RSADecryptionMethod(decryption_text, key)
         plain_text = RDM.decryption()
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
         window.bell()
-        EasyWarningWindows(window, "警告",
-                           "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告",
+                               "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n输入的密钥或密文不正确").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n输入的密钥或密文不正确").show_warning()
     except IndexError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文错误").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文错误").show_warning()
 
 
 def AEAD_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         AEADDM = AEADDecryptionMethod(decryption_text, key)
         plain_text = AEADDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败, 无效的密文或密钥").show_warning()
     except IndexError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文错误").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败, 密钥或密文错误").show_warning()
 
 
 def Blowfish_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         BDM = BlowfishDecryptionMethod(decryption_text, key)
         plain_text = BDM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
     except Exception:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
 
 
 def CAST5_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         CADM = CAST5DecryptionMethod(decryption_text, key)
         plain_text = CADM.decryption()
         replace(decryption_text_after, plain_text)
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
     except Exception:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
 
 
 def RC4_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         RDM = RC4DecryptionMethod(decryption_text, key)
         plain_text = RDM.decryption()
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n无效的密文或密钥").show_warning()
     except Exception:
         window.bell()
-        EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "错误\n\n解密失败").show_warning()
 
 
 def Camellia_decryption(decryption_text, key):
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         CDM = CamelliaDecryptionMethod(decryption_text, key)
         plain_text = CDM.decryption()
         replace(decryption_text_after, plain_text)
     except UnicodeDecodeError:
         window.bell()
-        EasyWarningWindows(window, "警告",
-                           "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告",
+                               "错误\n\n解密后的数据无法使用UTF-8编码解码, 请检查输入的密钥是否正确").show_warning()
     except ValueError:
         window.bell()
-        EasyWarningWindows(window, "警告",
-                           "错误\n\n无效的密文或密钥, 请确保输入正确的十六进制字符串").show_warning()
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告",
+                               "错误\n\n无效的密文或密钥, 请确保输入正确的十六进制字符串").show_warning()
     except Exception:
         window.bell()
-        EasyWarningWindows(window, "警告", "解密失败\n")
+        if error_prompt_settings_value == "开":
+            EasyWarningWindows(window, "警告", "解密失败\n")
 
 
 def encryption():
@@ -412,6 +480,11 @@ def encryption():
 
 
 def decryption():
+    global error_prompt_settings_value
+
+    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
+        error_prompt_settings_value = fire.read()
+
     try:
         decryption_text, algorithm_choice, key = get_data()
 
@@ -422,7 +495,8 @@ def decryption():
         if result:
             if decryption_text == '':
                 window.bell()
-                EasyWarningWindows(window, "警告", "错误\n\n密文为空").show_warning()
+                if error_prompt_settings_value == "开":
+                    EasyWarningWindows(window, "警告", "错误\n\n密文为空").show_warning()
 
             if algorithm_choice == '2':
                 AES_decryption(decryption_text, key)
@@ -442,7 +516,8 @@ def decryption():
                 Camellia_decryption(decryption_text, key)
             else:
                 window.bell()
-                EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
+                if error_prompt_settings_value == "开":
+                    EasyWarningWindows(window, "警告", "错误\n\n密钥或密文错误").show_warning()
     except TypeError:
         return
 
