@@ -686,9 +686,14 @@ def settings():
 
         fade_in(settings_window)
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close)
-        settings_window.bind('<Command-comma>', lambda event: settings())
-        settings_window.bind('<F1>', lambda event: instructions())
-        settings_window.bind('<q>', lambda event: quit_window())
+
+        with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
+            shortcut_keys_settings_value = file.read()
+
+        if shortcut_keys_settings_value == "开":
+            settings_window.bind('<Command-comma>', lambda event: settings())
+            settings_window.bind('<F1>', lambda event: instructions())
+            settings_window.bind('<q>', lambda event: quit_window())
 
     else:
         center_window(settings_window)
@@ -696,7 +701,7 @@ def settings():
 
 
 def instructions():
-    global instructions_num, instructions_window
+    global instructions_num, instructions_window, shortcut_keys_settings_value
 
     if instructions_num != 1:
         instructions_num += 1
@@ -720,9 +725,14 @@ def instructions():
         fade_in(instructions_window)
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
-        instructions_window.bind('<F1>', lambda event: instructions())
-        instructions_window.bind('<Command-comma>', lambda event: settings())
-        instructions_window.bind('<q>', lambda event: quit_window())
+
+        with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
+            shortcut_keys_settings_value = file.read()
+
+        if shortcut_keys_settings_value == "开":
+            instructions_window.bind('<F1>', lambda event: instructions())
+            instructions_window.bind('<Command-comma>', lambda event: settings())
+            instructions_window.bind('<q>', lambda event: quit_window())
     else:
         center_window(instructions_window)
         instructions_window.lift()
@@ -794,8 +804,13 @@ if auto_open_instructions_window == "开":
     instructions()
 
 window.protocol("WM_DELETE_WINDOW", quit_window)
-window.bind('<Command-comma>', lambda event: settings())
-window.bind('<F1>', lambda event: instructions())
-window.bind('<q>', lambda event: quit_window())
+
+with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
+    shortcut_keys_settings_value = file.read()
+
+if shortcut_keys_settings_value == "开":
+    window.bind('<Command-comma>', lambda event: settings())
+    window.bind('<F1>', lambda event: instructions())
+    window.bind('<q>', lambda event: quit_window())
 
 window.mainloop()
