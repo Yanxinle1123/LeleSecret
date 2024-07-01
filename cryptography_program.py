@@ -62,43 +62,36 @@ def quit_window():
     global settings_window, settings_num, instructions_num
 
     if settings_num == 1:
-        on_settings_window_close2()
+        on_settings_window_close()
     if instructions_num == 1:
         on_instructions_window_close()
     fade_out(window)
 
 
 def on_settings_window_close():
-    global settings_window, settings_num
-
-    fade_out(settings_window)
-    settings_num -= 1
-
-
-def on_settings_window_close2():
     global settings_window, settings_num, unsaved_reminder_settings_value, error_prompt_settings_value, \
         auto_save_settings_value, shortcut_keys_settings_value, other_settings
 
     file_list = []
     obtain_list = other_settings.get_set()
 
-    with open(unsaved_reminder_settings, 'r', encoding='utf-8') as fire:
-        unsaved_reminder_settings_value = fire.read()
+    with open(unsaved_reminder_settings, 'r', encoding='utf-8') as file:
+        unsaved_reminder_settings_value = file.read()
     if unsaved_reminder_settings_value == "开":
         file_list.append("退出设置未保存时提醒")
 
-    with open(error_prompt_settings, 'r', encoding='utf-8'):
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
     if error_prompt_settings_value == "开":
         file_list.append("加密解密出错时弹出错误提示")
 
-    with open(auto_save_settings, 'r', encoding='utf-8'):
-        auto_save_settings_value = fire.read()
+    with open(auto_save_settings, 'r', encoding='utf-8') as file:
+        auto_save_settings_value = file.read()
     if auto_save_settings_value == "开":
         file_list.append("重置设置后自动保存")
 
-    with open(shortcut_keys_settings, 'r', encoding='utf-8'):
-        shortcut_keys_settings_value = fire.read()
+    with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
+        shortcut_keys_settings_value = file.read()
     if shortcut_keys_settings_value == "开":
         file_list.append("启用快捷键")
 
@@ -134,8 +127,8 @@ def replace(text_box, text):
 def get_data():
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         decryption_text = decryption_text_need.get_content()
@@ -304,8 +297,8 @@ def AES_decryption(decryption_text, key):
 def Fernet_decryption(decryption_text, key):
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         CDM = FernetDecryptionMethod(decryption_text, key)
@@ -349,8 +342,8 @@ def RSA_decryption(decryption_text, key):
 def AEAD_decryption(decryption_text, key):
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         AEADDM = AEADDecryptionMethod(decryption_text, key)
@@ -369,8 +362,8 @@ def AEAD_decryption(decryption_text, key):
 def Blowfish_decryption(decryption_text, key):
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         BDM = BlowfishDecryptionMethod(decryption_text, key)
@@ -389,8 +382,8 @@ def Blowfish_decryption(decryption_text, key):
 def CAST5_decryption(decryption_text, key):
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         CADM = CAST5DecryptionMethod(decryption_text, key)
@@ -409,8 +402,8 @@ def CAST5_decryption(decryption_text, key):
 def RC4_decryption(decryption_text, key):
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         RDM = RC4DecryptionMethod(decryption_text, key)
@@ -433,8 +426,8 @@ def RC4_decryption(decryption_text, key):
 def Camellia_decryption(decryption_text, key):
     global error_prompt_settings_value
 
-    with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-        error_prompt_settings_value = fire.read()
+    with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+        error_prompt_settings_value = file.read()
 
     try:
         CDM = CamelliaDecryptionMethod(decryption_text, key)
@@ -555,29 +548,29 @@ def save_settings():
     with open(cryptography_settings, 'w', encoding='utf-8') as file_local:
         file_local.write(algorithm.get_combo_value())
 
-    with open(unsaved_reminder_settings, 'w', encoding='utf-8') as fire:
+    with open(unsaved_reminder_settings, 'w', encoding='utf-8') as file:
         if "退出设置未保存时提醒" in other_settings_set:
-            fire.write("开")
+            file.write("开")
         else:
-            fire.write("关")
+            file.write("关")
 
-    with open(error_prompt_settings, 'w', encoding='utf-8') as fire:
+    with open(error_prompt_settings, 'w', encoding='utf-8') as file:
         if "加密解密出错时弹出错误提示" in other_settings_set:
-            fire.write("开")
+            file.write("开")
         else:
-            fire.write("关")
+            file.write("关")
 
-    with open(auto_save_settings, 'w', encoding='utf-8') as fire:
+    with open(auto_save_settings, 'w', encoding='utf-8') as file:
         if "重置设置后自动保存" in other_settings_set:
-            fire.write("开")
+            file.write("开")
         else:
-            fire.write("关")
+            file.write("关")
 
-    with open(shortcut_keys_settings, 'w', encoding='utf-8') as fire:
+    with open(shortcut_keys_settings, 'w', encoding='utf-8') as file:
         if "启用快捷键" in other_settings_set:
-            fire.write("开")
+            file.write("开")
         else:
-            fire.write("关")
+            file.write("关")
 
 
 def reset_settings():
@@ -638,17 +631,17 @@ def settings():
         elif algorithm_settings == 'RC4':
             algorithm_settings = 9
 
-        with open(unsaved_reminder_settings, 'r', encoding='utf-8') as fire:
-            unsaved_reminder_settings_value = fire.read()
+        with open(unsaved_reminder_settings, 'r', encoding='utf-8') as file:
+            unsaved_reminder_settings_value = file.read()
 
-        with open(error_prompt_settings, 'r', encoding='utf-8') as fire:
-            error_prompt_settings_value = fire.read()
+        with open(error_prompt_settings, 'r', encoding='utf-8') as file:
+            error_prompt_settings_value = file.read()
 
-        with open(auto_save_settings, 'r', encoding='utf-8') as fire:
-            auto_save_settings_value = fire.read()
+        with open(auto_save_settings, 'r', encoding='utf-8') as file:
+            auto_save_settings_value = file.read()
 
-        with open(shortcut_keys_settings, 'r', encoding='utf-8') as fire:
-            shortcut_keys_settings_value = fire.read()
+        with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
+            shortcut_keys_settings_value = file.read()
 
         other_settings_set = []
         if unsaved_reminder_settings_value == "开":
@@ -688,7 +681,7 @@ def settings():
                    fill=tk.X)
 
         fade_in(settings_window)
-        settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close2)
+        settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close)
         settings_window.bind('<Command-comma>', lambda event: settings())
         settings_window.bind('<F1>', lambda event: instructions())
         settings_window.bind('<q>', lambda event: quit_window())
