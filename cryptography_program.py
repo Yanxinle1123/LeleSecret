@@ -541,7 +541,7 @@ def decryption():
 
 
 def save_settings():
-    global algorithm, other_settings
+    global algorithm, other_settings, instructions_num
 
     other_settings_set = other_settings.get_set()
 
@@ -569,8 +569,28 @@ def save_settings():
     with open(shortcut_keys_settings, 'w', encoding='utf-8') as file:
         if "启用快捷键" in other_settings_set:
             file.write("开")
+            window.bind('<Command-comma>', lambda event: settings())
+            window.bind('<F1>', lambda event: instructions())
+            window.bind('<q>', lambda event: quit_window())
+            settings_window.bind('<Command-comma>', lambda event: settings())
+            settings_window.bind('<F1>', lambda event: instructions())
+            settings_window.bind('<q>', lambda event: quit_window())
+            if instructions_num == 1:
+                instructions_window.bind('<Command-comma>', lambda event: settings())
+                instructions_window.bind('<F1>', lambda event: instructions())
+                instructions_window.bind('<q>', lambda event: quit_window())
         else:
             file.write("关")
+            window.unbind('<Command-comma>')
+            window.unbind('<F1>')
+            window.unbind('<q>')
+            settings_window.unbind('<Command-comma>')
+            settings_window.unbind('<F1>')
+            settings_window.unbind('<q>')
+            if instructions_num == 1:
+                instructions_window.unbind('<Command-comma>')
+                instructions_window.unbind('<F1>')
+                instructions_window.unbind('<q>')
 
 
 def reset_settings():
