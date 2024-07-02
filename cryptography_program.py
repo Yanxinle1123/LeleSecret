@@ -685,14 +685,18 @@ def settings():
         f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f12 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
+        f13 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
 
-        EasyLabel(f11, text="加密解密的算法:", side=tk.LEFT)
+        EasyLabel(f11, text="加密算法:", side=tk.LEFT)
         algorithm = EasyDropList(f11, options=['自动', 'AEAD', 'AES', 'Camellia', 'Fernet', 'RSA', 'Blowfish', 'CAST5',
                                                'RC4'], default=algorithm_settings, side=tk.LEFT)
         EasyLabel(f11, text="*越靠上的算法越安全", side=tk.LEFT, font_size=12, text_color="gray")
 
-        other_settings = EasyCheckButton(f12, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
+        EasyLabel(f12, text="由于程序会根据密钥自动检测加密的算法来匹配解密的算法, 所以无需设置解密的算法",
+                  side=tk.LEFT, font_size=12)
+
+        other_settings = EasyCheckButton(f13, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
                                                     "重置设置后自动保存", "启用快捷键"],
                                          set_text_list=other_settings_set, master_win=window, expand=True, fill=tk.Y)
 
