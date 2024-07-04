@@ -615,7 +615,8 @@ def reset_settings():
     result = EasyWarningWindows(settings_window, "是/否", "您确定要重置设置吗？").show_warning()
     if result:
         algorithm.set_combo_value('自动')
-        other_settings.set(["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "重置设置后自动保存", "启用快捷键"])
+        other_settings.set(["退出设置未保存时提醒", "加密解密出错时弹出错误提示", "重置设置后自动保存", "启用快捷键",
+                            "自动保存设置"])
         if auto_save_settings_value == "开":
             save_settings()
 
@@ -638,8 +639,14 @@ def center_window(root):
 
     root.geometry('%dx%d+%d+%d' % (width, height, x, y))
 
-    root.lift()
     root.focus_set()
+    root.lift()
+
+
+def about_keys():
+    global settings_window
+
+    EasyWarningWindows(settings_window, "信息", "按下q键退出\n按下F1显示使用说明").show_warning()
 
 
 def settings():
@@ -711,8 +718,6 @@ def settings():
         f12 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f13 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f14 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
-        f141 = EasyFrame(f14, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
-        f142 = EasyFrame(f14, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f2 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
 
         EasyLabel(f11, text="加密算法:", side=tk.LEFT)
@@ -728,8 +733,8 @@ def settings():
                                          set_text_list=other_settings_set, master_win=window, expand=True, fill=tk.Y,
                                          cmd=command)
 
-        EasyLabel(f141, text="1. 按下q键退出", side=tk.LEFT, font_size=12)
-        EasyLabel(f142, text="2. 按下F1打开使用说明", side=tk.LEFT, font_size=12)
+        EasyButton(f14, text="关于快捷键", cmd=about_keys, side=tk.LEFT, width=10, height=1,
+                   font_size=12)
 
         EasyButton(f2, text="保存", expand=tk.YES, height=2, cmd=save_settings, side=tk.LEFT,
                    fill=tk.X)
