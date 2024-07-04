@@ -39,6 +39,7 @@ check_and_create_file("instructions_settings.txt", "~", "开")
 check_and_create_file("unsaved_reminder_settings.txt", "~", "开")
 check_and_create_file("error_prompt_settings.txt", "~", "开")
 check_and_create_file("auto_save_settings.txt", "~", "开")
+check_and_create_file("auto_save_settings2.txt", "~", "开")
 check_and_create_file("enable_shortcut_keys.txt", "~", "开")
 
 
@@ -55,6 +56,7 @@ instructions_settings = resource_path('instructions_settings.txt')
 unsaved_reminder_settings = resource_path('unsaved_reminder_settings.txt')
 error_prompt_settings = resource_path('error_prompt_settings.txt')
 auto_save_settings = resource_path('auto_save_settings.txt')
+auto_save_settings2 = resource_path('auto_save_settings2.txt')
 shortcut_keys_settings = resource_path('enable_shortcut_keys.txt')
 
 
@@ -94,6 +96,11 @@ def on_settings_window_close():
         shortcut_keys_settings_value = file.read()
     if shortcut_keys_settings_value == "开":
         file_list.append("启用快捷键")
+
+    with open(auto_save_settings2, 'r', encoding='utf-8') as file:
+        auto_save_settings2_value = file.read()
+    if auto_save_settings2_value == "开":
+        file_list.append("自动保存设置")
 
     if unsaved_reminder_settings_value == "开" and obtain_list != file_list:
         result = EasyWarningWindows(settings_window, "是/否", "是否保存更改？").show_warning()
@@ -592,6 +599,12 @@ def save_settings():
                 instructions_window.unbind('<F1>')
                 instructions_window.unbind('<q>')
 
+    with open(auto_save_settings2, 'w', encoding='utf-8') as file:
+        if "自动保存设置" in other_settings_set:
+            file.write("开")
+        else:
+            file.write("关")
+
 
 def reset_settings():
     global algorithm, other_settings, auto_save_settings_value
@@ -632,10 +645,12 @@ def center_window(root):
 def settings():
     global settings_window, settings_num, algorithm, algorithm_settings, other_settings, \
         unsaved_reminder_settings_value, error_prompt_settings_value, auto_save_settings_value, \
-        shortcut_keys_settings_value, window
+        shortcut_keys_settings_value, auto_save_settings_value2, command, window
 
     if settings_num != 1:
         settings_num += 1
+
+        command = None
 
         with open(cryptography_settings, 'r', encoding='utf-8') as file:
             algorithm_settings = file.read()
@@ -667,6 +682,9 @@ def settings():
         with open(auto_save_settings, 'r', encoding='utf-8') as file:
             auto_save_settings_value = file.read()
 
+        with open(auto_save_settings2, 'r', encoding='utf-8') as file:
+            auto_save_settings_value2 = file.read()
+
         with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
             shortcut_keys_settings_value = file.read()
 
@@ -679,6 +697,9 @@ def settings():
             other_settings_set.append("重置设置后自动保存")
         if shortcut_keys_settings_value == "开":
             other_settings_set.append("启用快捷键")
+        if auto_save_settings_value2 == "开":
+            other_settings_set.append("自动保存设置")
+            command = save_settings
 
         settings_window = tk.Toplevel(window)
 
@@ -696,15 +717,16 @@ def settings():
 
         EasyLabel(f11, text="加密算法:", side=tk.LEFT)
         algorithm = EasyDropList(f11, options=['自动', 'AEAD', 'AES', 'Camellia', 'Fernet', 'RSA', 'Blowfish', 'CAST5',
-                                               'RC4'], default=algorithm_settings, side=tk.LEFT)
+                                               'RC4'], default=algorithm_settings, side=tk.LEFT, cmd=save_settings)
         EasyLabel(f11, text="*越靠上的算法越安全", side=tk.LEFT, font_size=12, text_color="gray")
 
         EasyLabel(f12, text="由于程序会根据密钥自动检测加密的算法来匹配解密的算法, 所以无需设置解密的算法",
                   side=tk.LEFT, font_size=12)
 
         other_settings = EasyCheckButton(f13, text=["退出设置未保存时提醒", "加密解密出错时弹出错误提示",
-                                                    "重置设置后自动保存", "启用快捷键"],
-                                         set_text_list=other_settings_set, master_win=window, expand=True, fill=tk.Y)
+                                                    "重置设置后自动保存", "启用快捷键", "自动保存设置"],
+                                         set_text_list=other_settings_set, master_win=window, expand=True, fill=tk.Y,
+                                         cmd=command)
 
         EasyLabel(f141, text="1. 按下q键退出", side=tk.LEFT, font_size=12)
         EasyLabel(f142, text="2. 按下F1打开使用说明", side=tk.LEFT, font_size=12)
@@ -778,7 +800,9 @@ other_settings = None
 unsaved_reminder_settings_value = None
 error_prompt_settings_value = None
 auto_save_settings_value = None
+auto_save_settings_value2 = None
 shortcut_keys_settings_value = None
+command = None
 instructions_num = 0
 settings_num = 0
 
