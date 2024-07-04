@@ -547,7 +547,7 @@ def decryption():
         return
 
 
-def save_settings():
+def save_settings(*args):
     global algorithm, other_settings, instructions_num
 
     other_settings_set = other_settings.get_set()
