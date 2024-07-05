@@ -10,6 +10,7 @@ from LeleEasyTkinter.easy_drop_list import EasyDropList
 from LeleEasyTkinter.easy_fade_animation import fade_in, fade_out
 from LeleEasyTkinter.easy_frame import EasyFrame
 from LeleEasyTkinter.easy_label import EasyLabel
+from LeleEasyTkinter.easy_mobile_animation import move_window_to
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 from cryptography.exceptions import InvalidTag
@@ -637,10 +638,9 @@ def center_window(root):
     x = (screen_width - width) // 2
     y = (screen_height - height) // 2 - 20
 
-    root.geometry('%dx%d+%d+%d' % (width, height, x, y))
-
     root.focus_set()
     root.lift()
+    move_window_to(root, x, y)
 
 
 def about_keys():
