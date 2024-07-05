@@ -640,7 +640,7 @@ def center_window(root):
 
     root.focus_set()
     root.lift()
-    move_window_to(root, x, y)
+    move_window_to(root, x, y, 100, 0.05)
 
 
 def about_keys():
