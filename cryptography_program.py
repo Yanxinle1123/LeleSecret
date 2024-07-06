@@ -628,13 +628,6 @@ def reset_settings():
             save_settings()
 
 
-def get_set():
-    check_button_set = other_settings.get_set()
-    if not check_button_set:
-        check_button_set = None
-    return check_button_set
-
-
 def center_window(root):
     width = root.winfo_width()
     height = root.winfo_height()
