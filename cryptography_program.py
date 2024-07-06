@@ -580,25 +580,31 @@ def save_settings(*args):
             window.bind('<Command-comma>', lambda event: settings())
             window.bind('<F1>', lambda event: instructions())
             window.bind('<q>', lambda event: quit_window())
+            window.bind('<Q>', lambda event: quit_window())
             settings_window.bind('<Command-comma>', lambda event: settings())
             settings_window.bind('<F1>', lambda event: instructions())
             settings_window.bind('<q>', lambda event: quit_window())
+            settings_window.bind('<Q>', lambda event: quit_window())
             if instructions_num == 1:
                 instructions_window.bind('<Command-comma>', lambda event: settings())
                 instructions_window.bind('<F1>', lambda event: instructions())
                 instructions_window.bind('<q>', lambda event: quit_window())
+                instructions_window.bind('<Q>', lambda event: quit_window())
         else:
             file.write("关")
             window.unbind('<Command-comma>')
             window.unbind('<F1>')
             window.unbind('<q>')
+            window.unbind('<Q>')
             settings_window.unbind('<Command-comma>')
             settings_window.unbind('<F1>')
             settings_window.unbind('<q>')
+            settings_window.unbind('<Q>')
             if instructions_num == 1:
                 instructions_window.unbind('<Command-comma>')
                 instructions_window.unbind('<F1>')
                 instructions_window.unbind('<q>')
+                instructions_window.unbind('<Q>')
 
     with open(auto_save_settings2, 'w', encoding='utf-8') as file:
         if "自动保存设置" in other_settings_set:
@@ -755,6 +761,7 @@ def settings():
             settings_window.bind('<Command-comma>', lambda event: settings())
             settings_window.bind('<F1>', lambda event: instructions())
             settings_window.bind('<q>', lambda event: quit_window())
+            settings_window.bind('<Q>', lambda event: quit_window())
 
     else:
         center_window(settings_window)
@@ -793,6 +800,7 @@ def instructions():
             instructions_window.bind('<F1>', lambda event: instructions())
             instructions_window.bind('<Command-comma>', lambda event: settings())
             instructions_window.bind('<q>', lambda event: quit_window())
+            instructions_window.bind('<Q>', lambda event: quit_window())
     else:
         center_window(instructions_window)
 
@@ -873,5 +881,6 @@ if shortcut_keys_settings_value == "开":
     window.bind('<Command-comma>', lambda event: settings())
     window.bind('<F1>', lambda event: instructions())
     window.bind('<q>', lambda event: quit_window())
+    window.bind('<Q>', lambda event: quit_window())
 
 window.mainloop()
