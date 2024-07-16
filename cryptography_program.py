@@ -639,8 +639,8 @@ def center_window(root):
     x = (screen_width - width) // 2
     y = (screen_height - height) // 2 - 20
 
-    root.focus_set()
     root.lift()
+    root.focus_set()
     move_window_to(root, x, y, 100, 0.05)
 
 
