@@ -4,6 +4,7 @@ import sys
 import tkinter as tk
 
 from LeleEasyTkinter.easy_auto_window import EasyAutoWindow
+from LeleEasyTkinter.easy_auto_window_size import auto_size
 from LeleEasyTkinter.easy_button import EasyButton
 from LeleEasyTkinter.easy_check_button import EasyCheckButton
 from LeleEasyTkinter.easy_drop_list import EasyDropList
@@ -12,6 +13,7 @@ from LeleEasyTkinter.easy_frame import EasyFrame
 from LeleEasyTkinter.easy_label import EasyLabel
 from LeleEasyTkinter.easy_mobile_animation import move_window_to
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
+from LeleEasyTkinter.easy_popup_animation import animate_resize_window
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
 from cryptography.exceptions import InvalidTag
 from cryptography.fernet import InvalidToken
@@ -709,7 +711,7 @@ def settings():
 
         settings_window = tk.Toplevel(window)
 
-        EasyAutoWindow(settings_window, window_title="设置", window_width_value=780, window_height_value=340,
+        EasyAutoWindow(settings_window, window_title="设置", window_width_value=1, window_height_value=1,
                        adjust_x=False, adjust_y=False)
 
         f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
@@ -744,7 +746,9 @@ def settings():
         EasyButton(f2, text="重置", expand=tk.YES, height=2, cmd=reset_settings, side=tk.LEFT,
                    fill=tk.X)
 
-        fade_in(settings_window)
+        fade_in(settings_window, ms=2)
+        animate_resize_window(settings_window, 780, 340, 50, "ordinary", False)
+
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close)
 
         with open(shortcut_keys_settings, 'r', encoding='utf-8') as file:
@@ -776,13 +780,14 @@ def instructions():
                              "择加密解密的算法。\n\n\n注意事项: 请不要全屏显示窗口, 全屏模式下, 显示会有一些问题。\n\n\n快捷键: 您可"
                              "以通过按q键来关闭程序, 您也可以通过按command键加逗号来打开设置窗口, 您还可以按F1键来打开使用方法窗口。")
 
-        EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=600, window_height_value=400,
+        EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=230, window_height_value=170,
                        minimum_value_x=230, minimum_value_y=170)
 
         instructions_box = EasyMultiText(instructions_window, expand=tk.YES, fill=tk.BOTH)
         replace(instructions_box, instructions_text)
 
-        fade_in(instructions_window)
+        fade_in(instructions_window, ms=2)
+        animate_resize_window(instructions_window, 600, 400, 50, "ordinary", False)
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
 
@@ -813,7 +818,11 @@ instructions_num = 0
 settings_num = 0
 
 window = tk.Tk()
-EasyAutoWindow(window, window_title="cryptography", minimum_value_x=640, minimum_value_y=870)
+
+window_width_value, window_height_value, window_x_value, window_y_value = auto_size(window)
+
+EasyAutoWindow(window, window_title="cryptography", minimum_value_x=636, minimum_value_y=834, window_width_value=640,
+               window_height_value=870)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
@@ -858,7 +867,8 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
-fade_in(window)
+fade_in(window, ms=1)
+animate_resize_window(window, window_width_value, window_height_value, 20, "ordinary", False)
 
 with open(instructions_settings, 'r', encoding='utf-8') as file:
     auto_open_instructions_window = file.read()
