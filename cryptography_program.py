@@ -15,6 +15,7 @@ from LeleEasyTkinter.easy_mobile_animation import move_window_to
 from LeleEasyTkinter.easy_multi_text import EasyMultiText
 from LeleEasyTkinter.easy_popup_animation import animate_resize_window
 from LeleEasyTkinter.easy_warning_windows import EasyWarningWindows
+from PIL import ImageTk, Image
 from cryptography.exceptions import InvalidTag
 from cryptography.fernet import InvalidToken
 
@@ -747,7 +748,7 @@ def settings():
                    fill=tk.X)
 
         fade_in(settings_window, ms=2)
-        animate_resize_window(settings_window, 780, 340, 50, "ordinary", False)
+        animate_resize_window(settings_window, 780, 340, 250, "ordinary", False)
 
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close)
 
@@ -786,8 +787,8 @@ def instructions():
         instructions_box = EasyMultiText(instructions_window, expand=tk.YES, fill=tk.BOTH)
         replace(instructions_box, instructions_text)
 
-        fade_in(instructions_window, ms=2)
-        animate_resize_window(instructions_window, 600, 400, 50, "ordinary", False)
+        fade_in(instructions_window, ms=3)
+        animate_resize_window(instructions_window, 600, 400, 200, "ordinary", False)
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
 
@@ -821,8 +822,11 @@ window = tk.Tk()
 
 window_width_value, window_height_value, window_x_value, window_y_value = auto_size(window)
 
-EasyAutoWindow(window, window_title="cryptography", minimum_value_x=636, minimum_value_y=834, window_width_value=640,
-               window_height_value=870)
+EasyAutoWindow(window, window_title="cryptography", minimum_value_x=636, minimum_value_y=834, window_width_value=636,
+               window_height_value=834)
+
+fade_in(window, ms=1)
+animate_resize_window(window, window_width_value, window_height_value, 120, "ordinary", False)
 
 f1 = EasyFrame(window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
 f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES).get()
@@ -867,9 +871,6 @@ EasyButton(window, text="设置", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, hei
 
 EasyButton(window, text="使用方法", fill=tk.BOTH, expand=tk.YES, side=tk.LEFT, height=2, cmd=instructions)
 
-fade_in(window, ms=1)
-animate_resize_window(window, window_width_value, window_height_value, 20, "ordinary", False)
-
 with open(instructions_settings, 'r', encoding='utf-8') as file:
     auto_open_instructions_window = file.read()
 if auto_open_instructions_window == "开":
@@ -885,5 +886,8 @@ if shortcut_keys_settings_value == "开":
     window.bind('<F1>', lambda event: instructions())
     window.bind('<q>', lambda event: quit_window())
     window.bind('<Q>', lambda event: quit_window())
+
+icon_image = ImageTk.PhotoImage(Image.open("logo.ico"))
+window.iconphoto(True, icon_image)
 
 window.mainloop()
