@@ -820,6 +820,9 @@ settings_num = 0
 
 window = tk.Tk()
 
+icon_image = ImageTk.PhotoImage(Image.open("logo.ico"))
+window.iconphoto(True, icon_image)
+
 window_width_value, window_height_value, window_x_value, window_y_value = auto_size(window)
 
 EasyAutoWindow(window, window_title="cryptography", minimum_value_x=636, minimum_value_y=834, window_width_value=636,
@@ -886,8 +889,5 @@ if shortcut_keys_settings_value == "开":
     window.bind('<F1>', lambda event: instructions())
     window.bind('<q>', lambda event: quit_window())
     window.bind('<Q>', lambda event: quit_window())
-
-icon_image = ImageTk.PhotoImage(Image.open("logo.ico"))
-window.iconphoto(True, icon_image)
 
 window.mainloop()
