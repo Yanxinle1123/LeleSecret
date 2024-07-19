@@ -712,8 +712,11 @@ def settings():
 
         settings_window = tk.Toplevel(window)
 
-        EasyAutoWindow(settings_window, window_title="设置", window_width_value=1, window_height_value=1,
+        EasyAutoWindow(settings_window, window_title="设置", window_width_value=280, window_height_value=140,
                        adjust_x=False, adjust_y=False)
+
+        fade_in(settings_window, ms=2)
+        animate_resize_window(settings_window, 780, 340, 250, "ordinary", False)
 
         f1 = EasyFrame(settings_window, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
         f11 = EasyFrame(f1, fill=tk.BOTH, side=tk.TOP, expand=tk.YES, is_debug=False).get()
@@ -746,9 +749,6 @@ def settings():
 
         EasyButton(f2, text="重置", expand=tk.YES, height=2, cmd=reset_settings, side=tk.LEFT,
                    fill=tk.X)
-
-        fade_in(settings_window, ms=2)
-        animate_resize_window(settings_window, 780, 340, 250, "ordinary", False)
 
         settings_window.protocol("WM_DELETE_WINDOW", on_settings_window_close)
 
@@ -784,11 +784,11 @@ def instructions():
         EasyAutoWindow(instructions_window, window_title="使用方法", window_width_value=230, window_height_value=170,
                        minimum_value_x=230, minimum_value_y=170)
 
+        fade_in(instructions_window, ms=2)
+        animate_resize_window(instructions_window, 600, 400, 200, "ordinary", False)
+
         instructions_box = EasyMultiText(instructions_window, expand=tk.YES, fill=tk.BOTH)
         replace(instructions_box, instructions_text)
-
-        fade_in(instructions_window, ms=3)
-        animate_resize_window(instructions_window, 600, 400, 200, "ordinary", False)
 
         instructions_window.protocol("WM_DELETE_WINDOW", on_instructions_window_close)
 
