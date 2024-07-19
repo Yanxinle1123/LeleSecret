@@ -1,7 +1,94 @@
 @startuml
-
 skin rose
+class CryptographyWindow{
+  - encryption_label_need : EasyLabel
+  - encryption_text_need : EasyMultiText
+  - key_label : EasyLabel
+  - key_text : EasyMultiText
+  - encryption_label_after: EasyLabel
+  - encryption_text_after : EasyMultiText
+==
+  - decryption_label_need : EasyLabel
+  - decryption_text_need : EasyMultiText
+  - key_label_need : EasyLabel
+  - key_text_need : EasyMultiText
+  - decryption_label_after: EasyLabel
+  - decryption_text_after : EasyMultiText
+==
+  - encryption_button:EasyButton
+  - decryption_button:EasyButton
+  - quit_button:EasyButton
+  - settings_button:EasyButton
+  - instructions_button:EasyButton
+==
+  - settings_win:SettingsWindow
+  - instructions_win:InstructionsWindow
+  - bind_key:ShortKey
+  - cipher_map:Cipher
+}
 
-class window
+class SettingsWindow{
+  - settings_window:EasyAutoWindow
+  - algorithm:EasyDropList
+  - other_settings:EasyCheckButton
+==
+  - save_button:EasyButton
+  - quit_button:EasyButton
+  - reset_button:EasyButton
+==
+  - bind_key:ShortKey
+  - settings_json_map:dict
+  - settings_json_file_path:str
+==
+  - def json_file_read(json_file_path:str):return void
+  - def json_file_write(json_file_path:str):return void
+}
 
+class InstructionsWindow{
+  - help_win:EasyAutoWindow
+  - instructions_box:EasyMultiText
+==
+  - bind_key:ShortKey
+}
+
+class ShortKey{
+  - bind_win:tk.Tk
+  - keyMap:dict
+  - wmMap:dict
+==
+  + def add_one_key(key:str,func:lambda_event):return void
+  + def add_one_key_for_win(name:str,func:func_name):return void
+  + def bind_all():return void
+  - def bind():return void
+  - def bind_protocol():return void
+
+}
+
+CryptographyWindow "1" -> "1" SettingsWindow
+CryptographyWindow "1" -> "1" InstructionsWindow
+CryptographyWindow "1" -> "1" ShortKey
+CryptographyWindow "1" -> "*" Cipher
+
+class Cipher extends ABC {
+  @abstractmethod def encryption(encryption_text):return key, cipher_text
+  @abstractmethod def decryption(decryption_text, key):return plain_text
+}
+
+class AEAD extends Cipher{}
+
+class AES extends Cipher{}
+
+class Camellia extends Cipher{}
+
+class Fernet extends Cipher{}
+
+class RSA extends Cipher{}
+
+class Blowfish extends Cipher{}
+
+class CAST5 extends Cipher{}
+
+class RC4 extends Cipher{}
+
+class AutoEncryption  extends Cipher{}
 @enduml
