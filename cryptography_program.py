@@ -62,6 +62,7 @@ error_prompt_settings = resource_path('error_prompt_settings.txt')
 auto_save_settings = resource_path('auto_save_settings.txt')
 auto_save_settings2 = resource_path('auto_save_settings2.txt')
 shortcut_keys_settings = resource_path('enable_shortcut_keys.txt')
+logo = resource_path('logo.ico')
 
 
 def quit_window():
@@ -642,7 +643,7 @@ def center_window(root):
 
     root.lift()
     root.focus_set()
-    move_window_to(root, x, y, 100, 0.05)
+    move_window_to(root, x, y, 200, 0.2, "ordinary")
 
 
 def about_keys():
@@ -770,7 +771,7 @@ def instructions():
 
     if instructions_num != 1:
         instructions_num += 1
-        instructions_window = tk.Tk()
+        instructions_window = tk.Toplevel()
         instructions_text = ("加密方法: 将需要加密的文本输入到指定的文本框内, 然后点击加密按钮, 加密后的文本和密钥就会显示在指定的文本"
                              "框内。您可以在设置窗口里面调整加密的算法, 默认为自动\n\n\n解密方法: 将密文和密钥输入到指定的文本框内, 然"
                              "后点击解密按钮, 解密后的文本就会显示在指定的文本框内, 程序会根据密钥自动匹配解密算法。(注: 如果解密出错,"
@@ -820,7 +821,7 @@ settings_num = 0
 
 window = tk.Tk()
 
-icon_image = ImageTk.PhotoImage(Image.open("logo.ico"))
+icon_image = ImageTk.PhotoImage(Image.open(logo))
 window.iconphoto(True, icon_image)
 
 window_width_value, window_height_value, window_x_value, window_y_value = auto_size(window)
