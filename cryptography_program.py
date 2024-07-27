@@ -824,7 +824,7 @@ window = tk.Tk()
 icon_image = ImageTk.PhotoImage(Image.open(logo))
 window.iconphoto(True, icon_image)
 
-window_width_value, window_height_value, window_x_value, window_y_value = auto_size(window)
+window_width_value, window_height_value, _, _ = auto_size(window)
 
 EasyAutoWindow(window, window_title="cryptography", minimum_value_x=636, minimum_value_y=834, window_width_value=636,
                window_height_value=834)
